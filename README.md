@@ -30,8 +30,7 @@ A simple movie web app where users can browse and watch uploaded movies.
 2. Open `index.html` in your browser
 
 ## 🌐 Live Demo
-
-(After GitHub Pages setup, add your link here)
+https://kmohanteja99-hue.github.io/Movies-App/
 
 ## 📌 Future Improvements
 
@@ -40,5 +39,4 @@ A simple movie web app where users can browse and watch uploaded movies.
 * Add video streaming support
 
 ## 👨‍💻 Author
-
-Your Name
+K.Mohan teja
