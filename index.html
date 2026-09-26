@@ -11,86 +11,146 @@
 
 <body>
 
-<header>
-  <h1>🎬 My Movie App</h1>
+<!-- ================= PASSWORD SCREEN ================= -->
 
-  <input
-    type="text"
-    id="search"
-    placeholder="Search movies..."
-    onkeyup="searchMovie()"
-  >
-</header>
+<div id="passwordScreen" class="password-screen">
 
+  <div class="password-box">
 
-<div class="container">
+    <div class="lock-icon">🔐</div>
 
-  <!-- Movie 1 -->
-  <div class="movie">
-    <h2>Sample Movie 1</h2>
+    <h1>🎬 Movies App</h1>
 
-    <iframe
-      src="https://www.youtube.com/embed/V_pGNyKNrJw"
-      title="Sample Movie 1"
-      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-      allowfullscreen>
-    </iframe>
+    <p>Enter password to continue</p>
+
+    <input
+      type="password"
+      id="passwordInput"
+      placeholder="Enter password"
+      autocomplete="off"
+      onkeydown="if(event.key === 'Enter') checkPassword()"
+    >
+
+    <button onclick="checkPassword()">
+      🔓 Unlock
+    </button>
+
+    <p id="passwordError"></p>
 
   </div>
 
-
-  <div class="movie">
-    <h2>My Movie 2</h2>
-
-    <video controls playsinline preload="V_pGNyKNrJw">
-        <source src="movies/movie1.mp4" type="video/mp4">
-        Your browser does not support video playback.
-    </video>
 </div>
 
 
-  <!-- Movie 3 -->
-  <div class="movie">
-    <h2>Sample Movie 3</h2>
+<!-- ================= MOVIE APP ================= -->
 
-    <iframe
-      src="https://www.youtube.com/embed/pjfXpRPHeVY"
-      title="Sample Movie 3"
-      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-      allowfullscreen>
-    </iframe>
+<div id="movieApp" class="hidden">
+
+  <header>
+
+    <h1>🎬 My Movie App</h1>
+
+    <input
+      type="text"
+      id="search"
+      placeholder="Search movies..."
+      onkeyup="searchMovie()"
+    >
+
+  </header>
+
+
+  <div class="container">
+
+
+    <!-- Movie 1 -->
+
+    <div class="movie">
+
+      <h2>Sample Movie 1</h2>
+
+      <iframe
+        src="https://www.youtube.com/embed/V_pGNyKNrJw"
+        title="Sample Movie 1"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+        allowfullscreen>
+      </iframe>
+
+    </div>
+
+
+    <!-- Movie 2 -->
+
+    <div class="movie">
+
+      <h2>My Movie 2</h2>
+
+      <video
+        controls
+        playsinline
+        preload="metadata">
+
+        <source
+          src="movies/movie1.mp4"
+          type="video/mp4">
+
+        Your browser does not support video playback.
+
+      </video>
+
+    </div>
+
+
+    <!-- Movie 3 -->
+
+    <div class="movie">
+
+      <h2>Sample Movie 3</h2>
+
+      <iframe
+        src="https://www.youtube.com/embed/pjfXpRPHeVY"
+        title="Sample Movie 3"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+        allowfullscreen>
+      </iframe>
+
+    </div>
+
+
+    <!-- Movie 4 -->
+
+    <div class="movie">
+
+      <h2>Sample Movie 4</h2>
+
+      <iframe
+        src="https://www.youtube.com/embed/CHWwf9nEXbI"
+        title="Sample Movie 4"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+        allowfullscreen>
+      </iframe>
+
+    </div>
+
+
+    <!-- Movie 5 -->
+
+    <div class="movie">
+
+      <h2>Dhurandhar The Revenge (2026)</h2>
+
+      <iframe
+        src="https://www.youtube.com/embed/QPuWL0ram2I"
+        title="Dhurandhar The Revenge (2026)"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+        allowfullscreen>
+      </iframe>
+
+    </div>
+
 
   </div>
 
-
-  <!-- Movie 4 -->
-  <div class="movie">
-    <h2>Sample Movie 4</h2>
-
-    <iframe
-      src="https://www.youtube.com/embed/CHWwf9nEXbI"
-      title="Sample Movie 4"
-      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-      allowfullscreen>
-    </iframe>
-
-  </div>
-
-
-  <!-- Movie 5 -->
-  <div class="movie">
-    <h2>Dhurandhar The Revenge (2026)</h2>
-
-    <iframe
-      src="https://www.youtube.com/embed/QPuWL0ram2I"
-      title=Dhurandhar The Revenge (2026)"
-      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-      allowfullscreen>
-    </iframe>
-
-  </div> 
-
-  
 </div>
 
 
