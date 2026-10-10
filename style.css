@@ -1,331 +1,465 @@
-/* ================= GENERAL ================= */
+
+/* ========================================
+   PREMIUM STREAMING APP THEME
+======================================== */
+
+:root {
+  --bg: #071421;
+  --surface: #101f30;
+  --surface-hover: #1b3046;
+  --blue: #00a8e1;
+  --blue-light: #48c8ff;
+  --text: #f5f9ff;
+  --muted: #aab9c9;
+  --border: #263d52;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
 
 body {
   margin: 0;
-  font-family: Arial, sans-serif;
-  background: #141414;
-  color: white;
+  min-height: 100vh;
+  background: var(--bg);
+  color: var(--text);
+  font-family: Arial, Helvetica, sans-serif;
+  line-height: 1.5;
 }
 
+/* ========================================
+   TOP HEADER
+======================================== */
 
-/* ================= PASSWORD SCREEN ================= */
-
-.password-screen {
-  position: fixed;
-  inset: 0;
-
-  width: 100%;
-  height: 100vh;
-
-  background:
-    radial-gradient(circle at center, #182b32 0%, #050505 60%);
-
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  z-index: 99999;
+.header {
+  position: relative;
+  padding: 27px 5%;
+  text-align: left;
+  background: linear-gradient(110deg, #071421, #102c46);
+  border-bottom: 1px solid var(--border);
 }
 
-
-.password-box {
-  width: 350px;
-  max-width: 85%;
-
-  padding: 35px;
-
-  background: rgba(20, 20, 20, 0.95);
-
-  border: 1px solid #00eaff;
-
-  border-radius: 20px;
-
-  text-align: center;
-
-  box-shadow:
-    0 0 20px rgba(0, 234, 255, 0.3),
-    0 0 50px rgba(0, 234, 255, 0.1);
-
-  animation: passwordBox 0.5s ease;
+.header h1 {
+  margin: 0;
+  font-size: clamp(26px, 4vw, 38px);
+  font-weight: 800;
+  letter-spacing: -1px;
+  color: #ffffff;
 }
 
-
-@keyframes passwordBox {
-
-  from {
-    opacity: 0;
-    transform: scale(0.8);
-  }
-
-  to {
-    opacity: 1;
-    transform: scale(1);
-  }
-
-}
-
-
-.lock-icon {
-  font-size: 60px;
-
-  margin-bottom: 10px;
-}
-
-
-.password-box h1 {
-  margin: 10px 0;
-
-  color: #00eaff;
-
-  font-size: 30px;
-}
-
-
-.password-box p {
-  color: #aaa;
-
+.subtitle {
+  margin: 5px 0 20px;
+  color: var(--muted);
   font-size: 15px;
 }
 
+/* Search field */
 
-.password-box input {
-
+#search {
+  display: block;
   width: 100%;
-
-  box-sizing: border-box;
-
-  padding: 14px;
-
-  margin-top: 15px;
-  margin-bottom: 15px;
-
-  background: #111;
-
-  color: white;
-
-  border: 1px solid #444;
-
+  max-width: 560px;
+  padding: 14px 19px;
+  border: 1px solid #3a536b;
   border-radius: 8px;
-
   outline: none;
-
-  font-size: 16px;
+  background: #0a1928;
+  color: white;
+  font-size: 15px;
+  transition: border-color 0.2s, box-shadow 0.2s;
 }
 
-
-.password-box input:focus {
-
-  border-color: #00eaff;
-
-  box-shadow: 0 0 10px rgba(0, 234, 255, 0.3);
-
+#search::placeholder {
+  color: #91a6ba;
 }
 
+#search:focus {
+  border-color: var(--blue);
+  box-shadow: 0 0 0 3px #00a8e122;
+}
 
-.password-box button {
+/* ========================================
+   MAIN CONTENT
+======================================== */
 
+.main {
   width: 100%;
+  max-width: 1600px;
+  margin: auto;
+  padding: 32px 5% 55px;
+}
 
-  padding: 14px;
+.shelf {
+  width: 100%;
+}
 
-  border: none;
+.section-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 22px;
+}
 
-  border-radius: 8px;
+.section-heading h2 {
+  margin: 0;
+  padding-left: 13px;
+  border-left: 4px solid var(--blue);
+  font-size: clamp(20px, 3vw, 26px);
+  font-weight: 750;
+  color: #ffffff;
+}
 
-  background: #00eaff;
+#movieCount {
+  color: var(--muted);
+  font-size: 14px;
+  white-space: nowrap;
+}
 
-  color: #000;
+/* ========================================
+   MOVIE GALLERY
+======================================== */
 
-  font-size: 16px;
+.movie-gallery {
+  display: grid;
+  grid-template-columns: repeat(
+    auto-fill,
+    minmax(175px, 1fr)
+  );
+  gap: 25px 19px;
+}
 
-  font-weight: bold;
+/* Movie cards */
 
+.movie-card {
+  min-width: 0;
+  overflow: hidden;
+  border: 1px solid transparent;
+  border-radius: 10px;
+  background: var(--surface);
+  box-shadow: 0 5px 16px #00000030;
+  transition:
+    transform 0.25s ease,
+    border-color 0.25s ease,
+    box-shadow 0.25s ease;
+}
+
+.movie-card:hover {
+  transform: translateY(-5px) scale(1.015);
+  border-color: #167eaa;
+  box-shadow: 0 12px 28px #00000070;
+}
+
+/* Poster area */
+
+.poster {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 2 / 3;
+  overflow: hidden;
+  background: linear-gradient(
+    145deg,
+    #193d59,
+    #101b2b,
+    #071421
+  );
   cursor: pointer;
-
-  transition: 0.3s;
 }
 
-
-.password-box button:hover {
-
-  background: #00bcd4;
-
-  transform: scale(1.02);
-
+.poster img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.4s ease;
 }
 
-
-#passwordError {
-
-  color: #ff4444;
-
-  min-height: 20px;
-
-  margin-top: 15px;
-
+.movie-card:hover .poster img {
+  transform: scale(1.06);
 }
 
+/* Play button overlay */
 
-/* ================= HIDDEN ================= */
+.play-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(
+    to top,
+    #06111bd9,
+    transparent 65%
+  );
+  opacity: 0.9;
+  transition: background 0.2s;
+}
 
-.hidden {
+.movie-card:hover .play-overlay {
+  background: #06111b55;
+}
+
+.play-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 55px;
+  height: 55px;
+  padding-left: 5px;
+  border: 2px solid #ffffffd9;
+  border-radius: 50%;
+  background: #071421d9;
+  color: white;
+  font-size: 22px;
+  cursor: pointer;
+  transition:
+    background 0.2s,
+    transform 0.2s;
+}
+
+.play-button:hover {
+  background: var(--blue);
+  border-color: var(--blue);
+  transform: scale(1.12);
+}
+
+/* Movie title and category */
+
+.movie-info {
+  padding: 13px 12px 15px;
+}
+
+.movie-info h3 {
+  margin: 0 0 6px;
+  color: #ffffff;
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 1.4;
+  overflow-wrap: anywhere;
+}
+
+.movie-info p {
+  margin: 0;
+  color: #b5c8d9;
+  font-size: 13px;
+}
+
+/* ========================================
+   VIDEO PLAYER MODAL
+======================================== */
+
+.modal {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background: #020812ed;
+  backdrop-filter: blur(8px);
+}
+
+.modal[hidden] {
   display: none;
 }
 
-
-/* ================= HEADER ================= */
-
-header {
-
-  background: black;
-
-  padding: 15px;
-
-  text-align: center;
-
+.modal-content {
+  width: min(100%, 1000px);
+  overflow: hidden;
+  border: 1px solid #294a63;
+  border-radius: 12px;
+  background: #0c1927;
+  box-shadow: 0 25px 80px #000000a0;
 }
 
-
-header h1 {
-
-  margin: 0 0 10px 0;
-
+.modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 15px;
+  padding: 14px 18px;
+  background: #10253a;
+  border-bottom: 1px solid var(--border);
 }
 
+.modal-header h2 {
+  margin: 0;
+  color: white;
+  font-size: 18px;
+}
 
-#search {
-
-  padding: 12px;
-
-  width: 60%;
-
-  max-width: 600px;
-
-  border: none;
-
+.close-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 40px;
+  min-height: 40px;
+  border: 1px solid #3b5369;
   border-radius: 8px;
-
-  outline: none;
-
-  font-size: 16px;
-
+  background: #1b3044;
+  color: white;
+  font-size: 21px;
+  cursor: pointer;
 }
 
-
-/* ================= MOVIE GRID ================= */
-
-.container {
-
-  display: grid;
-
-  grid-template-columns:
-    repeat(auto-fit, minmax(300px, 1fr));
-
-  gap: 20px;
-
-  padding: 20px;
-
+.close-button:hover {
+  background: #b82940;
+  border-color: #b82940;
 }
 
-
-/* ================= MOVIE CARD ================= */
-
-.movie {
-
-  background: #222;
-
-  padding: 10px;
-
-  border-radius: 10px;
-
-  transition: 0.3s;
-
-}
-
-
-.movie:hover {
-
-  transform: scale(1.03);
-
-  box-shadow:
-    0 0 20px rgba(0, 234, 255, 0.15);
-
-}
-
-
-.movie h2 {
-
-  margin-top: 5px;
-
-  font-size: 20px;
-
-}
-
-
-/* ================= VIDEO ================= */
-
-iframe,
-video {
-
+.video-container {
   width: 100%;
+  aspect-ratio: 16 / 9;
+  background: #000;
+}
 
-  height: 200px;
-
-  border-radius: 10px;
-
+.video-container iframe {
   display: block;
-
+  width: 100%;
+  height: 100%;
+  border: 0;
 }
 
+/* ========================================
+   EMPTY SEARCH MESSAGE
+======================================== */
 
-video {
-
-  background: black;
-
+.no-results {
+  padding: 45px 15px;
+  text-align: center;
+  color: var(--muted);
+  font-size: 17px;
 }
 
+.no-results[hidden] {
+  display: none;
+}
 
-/* ================= MOBILE ================= */
+/* ========================================
+   FOOTER
+======================================== */
+
+footer {
+  padding: 24px 15px;
+  border-top: 1px solid var(--border);
+  background: #06101b;
+  color: #91a6ba;
+  text-align: center;
+  font-size: 14px;
+}
+
+/* ========================================
+   TABLETS
+======================================== */
+
+@media (min-width: 601px) and (max-width: 900px) {
+  .movie-gallery {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 20px 15px;
+  }
+
+  .main {
+    padding-left: 24px;
+    padding-right: 24px;
+  }
+}
+
+/* ========================================
+   MOBILE
+======================================== */
 
 @media (max-width: 600px) {
-
-  .password-box {
-
-    width: 280px;
-
-    padding: 25px;
-
+  .header {
+    padding: 23px 17px;
   }
 
-
-  .password-box h1 {
-
-    font-size: 24px;
-
+  .header h1 {
+    font-size: 28px;
   }
 
+  .subtitle {
+    font-size: 14px;
+  }
 
   #search {
-
-    width: 85%;
-
+    max-width: none;
+    padding: 13px 15px;
   }
 
+  .main {
+    padding: 25px 13px 40px;
+  }
 
-  .container {
+  .section-heading {
+    margin-bottom: 17px;
+  }
 
-    grid-template-columns: 1fr;
+  .section-heading h2 {
+    font-size: 19px;
+    padding-left: 9px;
+  }
 
+  #movieCount {
+    font-size: 12px;
+  }
+
+  .movie-gallery {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 17px 12px;
+  }
+
+  .movie-card {
+    border-radius: 8px;
+  }
+
+  .movie-info {
     padding: 10px;
-
   }
 
-
-  iframe,
-  video {
-
-    height: 220px;
-
+  .movie-info h3 {
+    font-size: 14px;
   }
 
+  .movie-info p {
+    font-size: 12px;
+  }
+
+  .play-button {
+    width: 45px;
+    height: 45px;
+    font-size: 19px;
+  }
+
+  .modal {
+    padding: 8px;
+  }
+
+  .modal-content {
+    border-radius: 8px;
+  }
+
+  .modal-header {
+    padding: 10px;
+  }
+
+  .modal-header h2 {
+    font-size: 15px;
+  }
 }
+
+/* Respect reduced motion settings */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
