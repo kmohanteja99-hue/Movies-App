@@ -1,242 +1,331 @@
+/* ================= GENERAL ================= */
 
-// Add or edit your YouTube videos here.
-// Use the video ID from the YouTube URL, not the entire URL.
-const movies = [
-  {
-    title: "Movie 1",
-    category: "Action",
-    id: "eAfsQoBngKY"
-  },
-  {
-    title: "Movie 2",
-    category: "Entertainment",
-    id: "V_pGNyKNrJw"
-  },
-  {
-    title: "Movie 3",
-    category: "Drama",
-    id: "pjfXpRPHeVY"
-  },
-  {
-    title: "Movie 4",
-    category: "Comedy",
-    id: "CHWwf9nEXbI"
-  },
-  {
-    title: "Dhurandhar",
-    category: "Entertainment",
-    id: "cU1zdg61yT4"
-  }
-  {
-    title: "Youth",
-    category: "Entertainment",
-    id: "nVgNbSwLWXU"
-  },
-];
-
-const movieGrid = document.getElementById("movieGrid");
-const savedGrid = document.getElementById("savedGrid");
-const searchInput = document.getElementById("search");
-const movieCount = document.getElementById("movieCount");
-const listCount = document.getElementById("listCount");
-const emptyMessage = document.getElementById("emptyMessage");
-const savedEmpty = document.getElementById("savedEmpty");
-const modal = document.getElementById("videoModal");
-const modalTitle = document.getElementById("modalTitle");
-const playerContainer = document.getElementById("playerContainer");
-
-let selectedCategory = "All";
-let savedIds = [];
-
-try {
-  savedIds = JSON.parse(localStorage.getItem("cinescopeSaved")) || [];
-} catch {
-  savedIds = [];
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #141414;
+  color: white;
 }
 
-function saveList() {
-  localStorage.setItem("cinescopeSaved", JSON.stringify(savedIds));
+
+/* ================= PASSWORD SCREEN ================= */
+
+.password-screen {
+  position: fixed;
+  inset: 0;
+
+  width: 100%;
+  height: 100vh;
+
+  background:
+    radial-gradient(circle at center, #182b32 0%, #050505 60%);
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  z-index: 99999;
 }
 
-function getThumbnail(id) {
-  return `https://i.ytimg.com/vi/${encodeURIComponent(id)}/hqdefault.jpg`;
+
+.password-box {
+  width: 350px;
+  max-width: 85%;
+
+  padding: 35px;
+
+  background: rgba(20, 20, 20, 0.95);
+
+  border: 1px solid #00eaff;
+
+  border-radius: 20px;
+
+  text-align: center;
+
+  box-shadow:
+    0 0 20px rgba(0, 234, 255, 0.3),
+    0 0 50px rgba(0, 234, 255, 0.1);
+
+  animation: passwordBox 0.5s ease;
 }
 
-function createMovieCard(movie) {
-  const isSaved = savedIds.includes(movie.id);
-  const card = document.createElement("article");
-  card.className = "movie-card";
 
-  const poster = document.createElement("div");
-  poster.className = "poster";
-  poster.tabIndex = 0;
-  poster.setAttribute("role", "button");
-  poster.setAttribute("aria-label", `Play ${movie.title}`);
+@keyframes passwordBox {
 
-  const img = document.createElement("img");
-  img.src = getThumbnail(movie.id);
-  img.alt = movie.title;
-  img.loading = "lazy";
-
-  const fallback = document.createElement("div");
-  fallback.className = "poster-fallback";
-  fallback.textContent = "▶";
-  fallback.hidden = true;
-
-  img.onerror = () => {
-    img.hidden = true;
-    fallback.hidden = false;
-  };
-
-  const badge = document.createElement("div");
-  badge.className = "play-badge";
-  badge.innerHTML = "<span>▶</span>";
-
-  poster.append(img, fallback, badge);
-  poster.addEventListener("click", () => playMovie(movie));
-  poster.addEventListener("keydown", event => {
-    if (event.key === "Enter" || event.key === " ") {
-      event.preventDefault();
-      playMovie(movie);
-    }
-  });
-
-  const info = document.createElement("div");
-  info.className = "movie-info";
-
-  const title = document.createElement("h3");
-  title.textContent = movie.title;
-
-  const meta = document.createElement("div");
-  meta.className = "movie-meta";
-
-  const category = document.createElement("span");
-  category.className = "category-tag";
-  category.textContent = movie.category;
-
-  const type = document.createElement("span");
-  type.textContent = "YouTube";
-
-  meta.append(category, type);
-
-  const actions = document.createElement("div");
-  actions.className = "card-actions";
-
-  const playButton = document.createElement("button");
-  playButton.type = "button";
-  playButton.textContent = "▶ Play";
-  playButton.addEventListener("click", () => playMovie(movie));
-
-  const saveButton = document.createElement("button");
-  saveButton.type = "button";
-  saveButton.className = isSaved ? "saved" : "";
-  saveButton.textContent = isSaved ? "♥ Saved" : "♡ My List";
-  saveButton.addEventListener("click", () => toggleSaved(movie.id));
-
-  actions.append(playButton, saveButton);
-  info.append(title, meta, actions);
-  card.append(poster, info);
-
-  return card;
-}
-
-function renderMovies() {
-  const query = searchInput.value.trim().toLowerCase();
-
-  const filtered = movies.filter(movie => {
-    const matchesSearch =
-      movie.title.toLowerCase().includes(query) ||
-      movie.category.toLowerCase().includes(query);
-
-    const matchesCategory =
-      selectedCategory === "All" ||
-      movie.category === selectedCategory;
-
-    return matchesSearch && matchesCategory;
-  });
-
-  movieGrid.replaceChildren(...filtered.map(createMovieCard));
-  movieCount.textContent =
-    `${filtered.length} ${filtered.length === 1 ? "title" : "titles"}`;
-
-  emptyMessage.hidden = filtered.length > 0;
-
-  document.querySelectorAll(".filter").forEach(button => {
-    const active = button.dataset.category === selectedCategory;
-    button.classList.toggle("active", active);
-    button.setAttribute("aria-pressed", String(active));
-  });
-
-  renderSaved();
-}
-
-function renderSaved() {
-  const savedMovies = movies.filter(movie => savedIds.includes(movie.id));
-
-  savedGrid.replaceChildren(...savedMovies.map(createMovieCard));
-  listCount.textContent = savedMovies.length;
-  savedEmpty.hidden = savedMovies.length > 0;
-}
-
-function toggleSaved(id) {
-  if (savedIds.includes(id)) {
-    savedIds = savedIds.filter(savedId => savedId !== id);
-  } else {
-    savedIds.push(id);
+  from {
+    opacity: 0;
+    transform: scale(0.8);
   }
 
-  saveList();
-  renderMovies();
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+
 }
 
-function playMovie(movie) {
-  modalTitle.textContent = movie.title;
-  playerContainer.replaceChildren();
 
-  const iframe = document.createElement("iframe");
-  iframe.src =
-    `https://www.youtube-nocookie.com/embed/${encodeURIComponent(movie.id)}`;
-  iframe.title = movie.title;
-  iframe.allow =
-    "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share";
-  iframe.allowFullscreen = true;
-  iframe.referrerPolicy = "strict-origin-when-cross-origin";
+.lock-icon {
+  font-size: 60px;
 
-  playerContainer.appendChild(iframe);
-  modal.classList.add("open");
-  modal.setAttribute("aria-hidden", "false");
-  document.body.classList.add("modal-open");
+  margin-bottom: 10px;
 }
 
-function closePlayer() {
-  modal.classList.remove("open");
-  modal.setAttribute("aria-hidden", "true");
-  document.body.classList.remove("modal-open");
-  playerContainer.replaceChildren();
+
+.password-box h1 {
+  margin: 10px 0;
+
+  color: #00eaff;
+
+  font-size: 30px;
 }
 
-searchInput.addEventListener("input", renderMovies);
 
-document.getElementById("filters").addEventListener("click", event => {
-  const button = event.target.closest(".filter");
-  if (!button) return;
+.password-box p {
+  color: #aaa;
 
-  selectedCategory = button.dataset.category;
-  renderMovies();
-});
+  font-size: 15px;
+}
 
-document.getElementById("closeModal").addEventListener("click", closePlayer);
 
-modal.addEventListener("click", event => {
-  if (event.target === modal) closePlayer();
-});
+.password-box input {
 
-document.addEventListener("keydown", event => {
-  if (event.key === "Escape") closePlayer();
-});
+  width: 100%;
 
-document.getElementById("heroListButton").addEventListener("click", () => {
-  document.getElementById("my-list").scrollIntoView({ behavior: "smooth" });
-});
+  box-sizing: border-box;
 
-renderMovies();
+  padding: 14px;
+
+  margin-top: 15px;
+  margin-bottom: 15px;
+
+  background: #111;
+
+  color: white;
+
+  border: 1px solid #444;
+
+  border-radius: 8px;
+
+  outline: none;
+
+  font-size: 16px;
+}
+
+
+.password-box input:focus {
+
+  border-color: #00eaff;
+
+  box-shadow: 0 0 10px rgba(0, 234, 255, 0.3);
+
+}
+
+
+.password-box button {
+
+  width: 100%;
+
+  padding: 14px;
+
+  border: none;
+
+  border-radius: 8px;
+
+  background: #00eaff;
+
+  color: #000;
+
+  font-size: 16px;
+
+  font-weight: bold;
+
+  cursor: pointer;
+
+  transition: 0.3s;
+}
+
+
+.password-box button:hover {
+
+  background: #00bcd4;
+
+  transform: scale(1.02);
+
+}
+
+
+#passwordError {
+
+  color: #ff4444;
+
+  min-height: 20px;
+
+  margin-top: 15px;
+
+}
+
+
+/* ================= HIDDEN ================= */
+
+.hidden {
+  display: none;
+}
+
+
+/* ================= HEADER ================= */
+
+header {
+
+  background: black;
+
+  padding: 15px;
+
+  text-align: center;
+
+}
+
+
+header h1 {
+
+  margin: 0 0 10px 0;
+
+}
+
+
+#search {
+
+  padding: 12px;
+
+  width: 60%;
+
+  max-width: 600px;
+
+  border: none;
+
+  border-radius: 8px;
+
+  outline: none;
+
+  font-size: 16px;
+
+}
+
+
+/* ================= MOVIE GRID ================= */
+
+.container {
+
+  display: grid;
+
+  grid-template-columns:
+    repeat(auto-fit, minmax(300px, 1fr));
+
+  gap: 20px;
+
+  padding: 20px;
+
+}
+
+
+/* ================= MOVIE CARD ================= */
+
+.movie {
+
+  background: #222;
+
+  padding: 10px;
+
+  border-radius: 10px;
+
+  transition: 0.3s;
+
+}
+
+
+.movie:hover {
+
+  transform: scale(1.03);
+
+  box-shadow:
+    0 0 20px rgba(0, 234, 255, 0.15);
+
+}
+
+
+.movie h2 {
+
+  margin-top: 5px;
+
+  font-size: 20px;
+
+}
+
+
+/* ================= VIDEO ================= */
+
+iframe,
+video {
+
+  width: 100%;
+
+  height: 200px;
+
+  border-radius: 10px;
+
+  display: block;
+
+}
+
+
+video {
+
+  background: black;
+
+}
+
+
+/* ================= MOBILE ================= */
+
+@media (max-width: 600px) {
+
+  .password-box {
+
+    width: 280px;
+
+    padding: 25px;
+
+  }
+
+
+  .password-box h1 {
+
+    font-size: 24px;
+
+  }
+
+
+  #search {
+
+    width: 85%;
+
+  }
+
+
+  .container {
+
+    grid-template-columns: 1fr;
+
+    padding: 10px;
+
+  }
+
+
+  iframe,
+  video {
+
+    height: 220px;
+
+  }
+
+}
