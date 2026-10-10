@@ -1,8 +1,6 @@
-```javascript
-// Add or edit your YouTube videos here.
-// Use the video ID from a YouTube link.
-// Example: https://youtu.be/eAfsQoBngKY -> eAfsQoBngKY
 
+// Add or edit your YouTube videos here.
+// Use the video ID from the YouTube URL, not the entire URL.
 const movies = [
   {
     title: "Movie 1",
@@ -21,7 +19,7 @@ const movies = [
   },
   {
     title: "Movie 4",
-    category: "Featured",
+    category: "Comedy",
     id: "CHWwf9nEXbI"
   },
   {
@@ -31,73 +29,72 @@ const movies = [
   }
 ];
 
-const gallery = document.getElementById("movieGrid");
-const savedGallery = document.getElementById("savedGrid");
+const movieGrid = document.getElementById("movieGrid");
+const savedGrid = document.getElementById("savedGrid");
 const searchInput = document.getElementById("search");
 const movieCount = document.getElementById("movieCount");
+const listCount = document.getElementById("listCount");
 const emptyMessage = document.getElementById("emptyMessage");
 const savedEmpty = document.getElementById("savedEmpty");
-const modal = document.getElementById("playerModal");
-const playerFrame = document.getElementById("playerFrame");
-const playerTitle = document.getElementById("playerTitle");
+const modal = document.getElementById("videoModal");
+const modalTitle = document.getElementById("modalTitle");
+const playerContainer = document.getElementById("playerContainer");
 
-let activeCategory = "All";
-let currentMovies = movies;
+let selectedCategory = "All";
+let savedIds = [];
 
-function getSavedIds() {
-  try {
-    return JSON.parse(localStorage.getItem("cinescope-list") || "[]");
-  } catch {
-    return [];
-  }
+try {
+  savedIds = JSON.parse(localStorage.getItem("cinescopeSaved")) || [];
+} catch {
+  savedIds = [];
 }
 
-function saveIds(ids) {
-  try {
-    localStorage.setItem("cinescope-list", JSON.stringify(ids));
-  } catch {
-    alert("Your browser could not save the list.");
-  }
+function saveList() {
+  localStorage.setItem("cinescopeSaved", JSON.stringify(savedIds));
 }
 
-function getThumbnail(movie) {
-  return `https://i.ytimg.com/vi/${encodeURIComponent(movie.id)}/hqdefault.jpg`;
+function getThumbnail(id) {
+  return `https://i.ytimg.com/vi/${encodeURIComponent(id)}/hqdefault.jpg`;
 }
 
-function createCard(movie) {
-  const saved = getSavedIds().includes(movie.id);
+function createMovieCard(movie) {
+  const isSaved = savedIds.includes(movie.id);
   const card = document.createElement("article");
   card.className = "movie-card";
 
   const poster = document.createElement("div");
   poster.className = "poster";
+  poster.tabIndex = 0;
+  poster.setAttribute("role", "button");
+  poster.setAttribute("aria-label", `Play ${movie.title}`);
 
-  const image = document.createElement("img");
-  image.src = getThumbnail(movie);
-  image.alt = `${movie.title} poster`;
-  image.loading = "lazy";
-  image.onerror = () => {
-    image.onerror = null;
-    image.src = "https://placehold.co/640x400/10243a/47b8ff?text=Video";
+  const img = document.createElement("img");
+  img.src = getThumbnail(movie.id);
+  img.alt = movie.title;
+  img.loading = "lazy";
+
+  const fallback = document.createElement("div");
+  fallback.className = "poster-fallback";
+  fallback.textContent = "▶";
+  fallback.hidden = true;
+
+  img.onerror = () => {
+    img.hidden = true;
+    fallback.hidden = false;
   };
 
-  const playOverlay = document.createElement("div");
-  playOverlay.className = "play-overlay";
+  const badge = document.createElement("div");
+  badge.className = "play-badge";
+  badge.innerHTML = "<span>▶</span>";
 
-  const playButton = document.createElement("button");
-  playButton.className = "play-button";
-  playButton.textContent = "▶";
-  playButton.setAttribute("aria-label", `Play ${movie.title}`);
-  playButton.addEventListener("click", () => openPlayer(movie));
-
-  const saveButton = document.createElement("button");
-  saveButton.className = `save-button${saved ? " saved" : ""}`;
-  saveButton.textContent = saved ? "♥" : "♡";
-  saveButton.setAttribute("aria-label", saved ? "Remove from My List" : "Save to My List");
-  saveButton.addEventListener("click", () => toggleSaved(movie.id));
-
-  playOverlay.appendChild(playButton);
-  poster.append(image, playOverlay, saveButton);
+  poster.append(img, fallback, badge);
+  poster.addEventListener("click", () => playMovie(movie));
+  poster.addEventListener("keydown", event => {
+    if (event.key === "Enter" || event.key === " ") {
+      event.preventDefault();
+      playMovie(movie);
+    }
+  });
 
   const info = document.createElement("div");
   info.className = "movie-info";
@@ -113,16 +110,27 @@ function createCard(movie) {
   category.textContent = movie.category;
 
   const type = document.createElement("span");
-  type.textContent = "▶ YouTube";
+  type.textContent = "YouTube";
 
   meta.append(category, type);
-  info.append(title, meta);
-  card.append(poster, info);
 
-  // Clicking the poster or title also opens the video.
-  poster.addEventListener("dblclick", () => openPlayer(movie));
-  title.style.cursor = "pointer";
-  title.addEventListener("click", () => openPlayer(movie));
+  const actions = document.createElement("div");
+  actions.className = "card-actions";
+
+  const playButton = document.createElement("button");
+  playButton.type = "button";
+  playButton.textContent = "▶ Play";
+  playButton.addEventListener("click", () => playMovie(movie));
+
+  const saveButton = document.createElement("button");
+  saveButton.type = "button";
+  saveButton.className = isSaved ? "saved" : "";
+  saveButton.textContent = isSaved ? "♥ Saved" : "♡ My List";
+  saveButton.addEventListener("click", () => toggleSaved(movie.id));
+
+  actions.append(playButton, saveButton);
+  info.append(title, meta, actions);
+  card.append(poster, info);
 
   return card;
 }
@@ -130,106 +138,100 @@ function createCard(movie) {
 function renderMovies() {
   const query = searchInput.value.trim().toLowerCase();
 
-  currentMovies = movies.filter(movie => {
+  const filtered = movies.filter(movie => {
     const matchesSearch =
       movie.title.toLowerCase().includes(query) ||
       movie.category.toLowerCase().includes(query);
 
     const matchesCategory =
-      activeCategory === "All" || movie.category === activeCategory;
+      selectedCategory === "All" ||
+      movie.category === selectedCategory;
 
     return matchesSearch && matchesCategory;
   });
 
-  gallery.replaceChildren();
-
-  currentMovies.forEach(movie => {
-    gallery.appendChild(createCard(movie));
-  });
-
+  movieGrid.replaceChildren(...filtered.map(createMovieCard));
   movieCount.textContent =
-    `${currentMovies.length} ${currentMovies.length === 1 ? "title" : "titles"}`;
+    `${filtered.length} ${filtered.length === 1 ? "title" : "titles"}`;
 
-  emptyMessage.classList.toggle("hidden", currentMovies.length > 0);
-}
+  emptyMessage.hidden = filtered.length > 0;
 
-function renderSaved() {
-  const savedIds = getSavedIds();
-  const savedMovies = movies.filter(movie => savedIds.includes(movie.id));
-
-  savedGallery.replaceChildren();
-
-  savedMovies.forEach(movie => {
-    savedGallery.appendChild(createCard(movie));
+  document.querySelectorAll(".filter").forEach(button => {
+    const active = button.dataset.category === selectedCategory;
+    button.classList.toggle("active", active);
+    button.setAttribute("aria-pressed", String(active));
   });
 
-  savedEmpty.classList.toggle("hidden", savedMovies.length > 0);
-}
-
-function toggleSaved(id) {
-  const savedIds = getSavedIds();
-  const updatedIds = savedIds.includes(id)
-    ? savedIds.filter(savedId => savedId !== id)
-    : [...savedIds, id];
-
-  saveIds(updatedIds);
-  renderMovies();
   renderSaved();
 }
 
-function openPlayer(movie) {
-  // The YouTube owner must allow embedding for playback to work.
-  const url = `https://www.youtube-nocookie.com/embed/${encodeURIComponent(movie.id)}?autoplay=1&rel=0`;
+function renderSaved() {
+  const savedMovies = movies.filter(movie => savedIds.includes(movie.id));
 
-  playerTitle.textContent = movie.title;
-  playerFrame.replaceChildren();
+  savedGrid.replaceChildren(...savedMovies.map(createMovieCard));
+  listCount.textContent = savedMovies.length;
+  savedEmpty.hidden = savedMovies.length > 0;
+}
+
+function toggleSaved(id) {
+  if (savedIds.includes(id)) {
+    savedIds = savedIds.filter(savedId => savedId !== id);
+  } else {
+    savedIds.push(id);
+  }
+
+  saveList();
+  renderMovies();
+}
+
+function playMovie(movie) {
+  modalTitle.textContent = movie.title;
+  playerContainer.replaceChildren();
 
   const iframe = document.createElement("iframe");
-  iframe.src = url;
+  iframe.src =
+    `https://www.youtube-nocookie.com/embed/${encodeURIComponent(movie.id)}`;
   iframe.title = movie.title;
-  iframe.allow = "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share";
+  iframe.allow =
+    "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share";
   iframe.allowFullscreen = true;
   iframe.referrerPolicy = "strict-origin-when-cross-origin";
 
-  playerFrame.appendChild(iframe);
-  modal.classList.remove("hidden");
+  playerContainer.appendChild(iframe);
+  modal.classList.add("open");
+  modal.setAttribute("aria-hidden", "false");
   document.body.classList.add("modal-open");
 }
 
 function closePlayer() {
-  modal.classList.add("hidden");
+  modal.classList.remove("open");
+  modal.setAttribute("aria-hidden", "true");
   document.body.classList.remove("modal-open");
-  playerFrame.replaceChildren();
+  playerContainer.replaceChildren();
 }
 
 searchInput.addEventListener("input", renderMovies);
 
 document.getElementById("filters").addEventListener("click", event => {
-  const button = event.target.closest("button[data-category]");
+  const button = event.target.closest(".filter");
   if (!button) return;
 
-  activeCategory = button.dataset.category;
-
-  document.querySelectorAll(".filter").forEach(filter => {
-    filter.classList.toggle("active", filter === button);
-  });
-
+  selectedCategory = button.dataset.category;
   renderMovies();
 });
 
-document.getElementById("closePlayer").addEventListener("click", closePlayer);
+document.getElementById("closeModal").addEventListener("click", closePlayer);
 
 modal.addEventListener("click", event => {
   if (event.target === modal) closePlayer();
 });
 
 document.addEventListener("keydown", event => {
-  if (event.key === "Escape" && !modal.classList.contains("hidden")) {
-    closePlayer();
-  }
+  if (event.key === "Escape") closePlayer();
 });
 
-// Initial display
+document.getElementById("heroListButton").addEventListener("click", () => {
+  document.getElementById("my-list").scrollIntoView({ behavior: "smooth" });
+});
+
 renderMovies();
-renderSaved();
-```
