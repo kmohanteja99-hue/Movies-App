@@ -28,8 +28,8 @@ const movies = [
     id: "cU1zdg61yT4"
   }
   {
-    title: "Movie 6",
-    category: "New",
+    title: "Youth",
+    category: "Entertainment",
     id: "nVgNbSwLWXU"
   },
 ];
