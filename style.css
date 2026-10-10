@@ -1,52 +1,68 @@
 
+/* ===== CINEMATIC PREMIUM MOVIES APP ===== */
+
 :root {
-  --bg: #071421;
-  --panel: #102338;
-  --blue: #00a8e1;
-  --text: #f4f8fc;
-  --muted: #b3c2d1;
-  --border: #294258;
+  --background: #050b14;
+  --surface: #101b2b;
+  --surface-light: #19283b;
+  --accent: #00b9f1;
+  --accent-hover: #47d0ff;
+  --text: #ffffff;
+  --muted: #b6c5d7;
+  --border: #293b50;
 }
 
 * {
   box-sizing: border-box;
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 body {
   margin: 0;
   min-height: 100vh;
-  background: radial-gradient(ellipse at top, #102b43, #071421 65%);
+  background:
+    radial-gradient(ellipse at 50% 0%, #152e49 0%, transparent 50%),
+    var(--background);
   color: var(--text);
   font-family: Arial, Helvetica, sans-serif;
 }
 
+/* ===== PASSWORD / LOGIN SCREEN ===== */
+
 .password-screen {
   position: fixed;
   inset: 0;
-  z-index: 2000;
+  z-index: 9999;
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 20px;
-  background: radial-gradient(ellipse at top, #163d5d, #071421 65%);
+  background:
+    radial-gradient(ellipse at top, #16456b, transparent 60%),
+    #050b14;
 }
 
 .password-box {
-  width: min(100%, 410px);
-  padding: 32px 26px;
-  border: 1px solid #31516b;
-  border-radius: 16px;
-  background: #0d2032;
-  box-shadow: 0 25px 80px #0008;
+  width: 100%;
+  max-width: 420px;
+  padding: 38px 30px;
   text-align: center;
+  background: linear-gradient(145deg, #172a40, #0a1422);
+  border: 1px solid #34516d;
+  border-radius: 18px;
+  box-shadow: 0 25px 80px #0009;
 }
 
 .lock-icon {
-  font-size: 48px;
+  font-size: 54px;
 }
 
 .password-box h1 {
-  color: white;
+  color: #fff;
+  font-size: 29px;
 }
 
 .password-box p {
@@ -55,140 +71,249 @@ body {
 
 .password-box input {
   width: 100%;
-  padding: 14px;
-  margin: 10px 0;
-  border: 1px solid #3a566e;
-  border-radius: 8px;
-  background: #071421;
+  margin: 12px 0;
+  padding: 15px;
+  border: 1px solid #425a72;
+  border-radius: 9px;
+  outline: none;
+  background: #07111e;
   color: white;
   font-size: 16px;
 }
 
+.password-box input:focus {
+  border-color: var(--accent);
+}
+
 .password-box button {
   width: 100%;
-  padding: 14px;
+  padding: 15px;
   border: 0;
-  border-radius: 8px;
-  background: var(--blue);
-  color: #03121d;
+  border-radius: 9px;
+  background: var(--accent);
+  color: #04111c;
   font-weight: bold;
   font-size: 16px;
   cursor: pointer;
 }
 
+.password-box button:hover {
+  background: var(--accent-hover);
+}
+
 #passwordError {
-  color: #ff8d9a;
+  color: #ff8794;
 }
 
 .hidden {
   display: none !important;
 }
 
+/* ===== PREMIUM HEADER ===== */
+
 #movieApp > header {
-  padding: 28px 5%;
-  background: linear-gradient(110deg, #071421, #12334e);
-  border-bottom: 1px solid var(--border);
+  position: relative;
+  padding: 26px 5% 30px;
+  background: linear-gradient(
+    110deg,
+    #07111e 0%,
+    #102942 55%,
+    #07111e 100%
+  );
+  border-bottom: 1px solid #253d54;
+}
+
+#movieApp > header::after {
+  content: "";
+  display: block;
+  width: 75px;
+  height: 3px;
+  margin-top: 20px;
+  border-radius: 5px;
+  background: var(--accent);
 }
 
 header h1 {
-  margin: 0 0 18px;
-  color: white;
-  font-size: clamp(27px, 4vw, 38px);
+  margin: 0 0 20px;
+  color: #fff;
+  font-size: clamp(29px, 4vw, 42px);
+  font-weight: 800;
+  letter-spacing: -1px;
+  text-shadow: 0 3px 18px #00b9f12a;
 }
 
+/* Search bar */
+
 #search {
-  display: block;
-  width: min(100%, 600px);
-  padding: 14px 18px;
-  border: 1px solid #3b5870;
-  border-radius: 9px;
+  width: min(100%, 570px);
+  padding: 15px 19px;
+  border: 1px solid #354e66;
+  border-radius: 10px;
   outline: none;
-  background: #081827;
+  background: #081522;
   color: white;
-  font-size: 16px;
+  font-size: 15px;
+  transition: border-color .2s, box-shadow .2s;
 }
 
 #search::placeholder {
-  color: #9bb0c3;
+  color: #a4b5c8;
 }
 
 #search:focus {
-  border-color: var(--blue);
-  box-shadow: 0 0 0 3px #00a8e126;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px #00b9f124;
 }
+
+/* ===== MOVIE COLLECTION ===== */
 
 .container {
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 22px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 26px;
   max-width: 1600px;
   margin: auto;
-  padding: 28px 5% 55px;
+  padding: 36px 5% 70px;
 }
+
+/* Individual movie cards */
 
 .movie {
   min-width: 0;
-  overflow: hidden;
   padding: 12px;
-  border: 1px solid #263e53;
+  overflow: hidden;
+  border: 1px solid var(--border);
   border-radius: 13px;
-  background: linear-gradient(145deg, #13283a, #0d1c2a);
-  box-shadow: 0 8px 22px #0004;
-  transition: transform .22s, border-color .22s, box-shadow .22s;
+  background: linear-gradient(150deg, #142337, #0b1421);
+  box-shadow: 0 10px 28px #0004;
+  transition:
+    transform .25s ease,
+    border-color .25s ease,
+    box-shadow .25s ease;
 }
 
 .movie:hover {
-  transform: translateY(-4px);
-  border-color: #167eaa;
-  box-shadow: 0 14px 30px #0007;
+  transform: translateY(-6px);
+  border-color: #168bb9;
+  box-shadow: 0 18px 38px #0008;
 }
 
 .movie h2 {
-  margin: 0 0 12px;
-  color: #f7fbff;
+  min-height: 25px;
+  margin: 3px 0 13px;
+  color: #f6f9ff;
   font-size: 17px;
-  line-height: 1.4;
+  font-weight: 700;
+  line-height: 1.45;
 }
+
+/* Wide cinema video frames */
 
 .movie iframe {
   display: block;
   width: 100%;
   aspect-ratio: 16 / 9;
-  border: 1px solid #31485d;
+  height: auto;
+  border: 1px solid #344b61;
   border-radius: 9px;
-  background: #02070d;
+  background: #000;
 }
 
-@media (max-width: 1000px) {
+/* ===== SCROLLBAR ===== */
+
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: #050b14;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #30465d;
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--accent);
+}
+
+/* ===== RESPONSIVE DESKTOP ===== */
+
+@media (min-width: 1450px) {
   .container {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 28px;
   }
 }
 
+/* ===== TABLETS ===== */
+
+@media (min-width: 651px) and (max-width: 1050px) {
+  .container {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 20px;
+  }
+}
+
+/* ===== MOBILE ===== */
+
 @media (max-width: 650px) {
   #movieApp > header {
-    padding: 23px 16px;
+    padding: 24px 17px;
+  }
+
+  header h1 {
+    font-size: 29px;
+  }
+
+  #search {
+    width: 100%;
   }
 
   .container {
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 12px;
-    padding: 18px 12px 35px;
+    gap: 13px;
+    padding: 22px 12px 45px;
   }
 
   .movie {
     padding: 8px;
-    border-radius: 9px;
+    border-radius: 10px;
   }
 
   .movie h2 {
+    min-height: 36px;
+    margin: 3px 0 9px;
     font-size: 14px;
-    margin-bottom: 8px;
+  }
+
+  .movie iframe {
+    border-radius: 7px;
   }
 }
+
+/* Small phones */
 
 @media (max-width: 360px) {
   .container {
     grid-template-columns: 1fr;
   }
+
+  .movie h2 {
+    min-height: auto;
+    font-size: 16px;
+  }
 }
+
+/* Reduce animations when requested by device settings */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    transition: none !important;
+  }
+}
+
