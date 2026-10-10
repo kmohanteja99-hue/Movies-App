@@ -25,7 +25,7 @@ const movies = [
   {
     title: "Dhurandhar",
     category: "Entertainment",
-    id: "OwXdQGSkoWskHuiR"
+    id: "cU1zdg61yT4"
   }
 ];
 
