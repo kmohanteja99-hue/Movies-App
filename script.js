@@ -23,7 +23,7 @@ const movies = [
     id: "CHWwf9nEXbI"
   },
   {
-    title: "Movie 5",
+    title: "Dhurandhar",
     category: "Entertainment",
     id: "cU1zdg61yT4"
   }
