@@ -1,107 +1,113 @@
 
-```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#071525">
-  <title>CineScope — Movie Discovery</title>
+  <meta name="theme-color" content="#07111f">
+  <title>CineScope | Movies & Videos</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-  <header class="topbar">
-    <a href="#home" class="brand"><span>▶</span> CINE<span class="blue">SCOPE</span></a>
+<header class="navbar">
+  <a class="brand" href="#home"><span>▶</span> CINE<span class="blue">SCOPE</span></a>
 
-    <nav class="nav">
-      <a href="#home">Home</a>
-      <a href="#movies">Discover</a>
-      <a href="#series">Videos</a>
-      <a href="#my-list">My List</a>
-    </nav>
+  <nav>
+    <a href="#home">Home</a>
+    <a href="#discover">Discover</a>
+    <a href="#discover">Videos</a>
+    <a href="#my-list">My List <span id="listCount">0</span></a>
+  </nav>
 
-    <input id="search" class="search"
-      type="search" placeholder="Search movies and videos..."
-      aria-label="Search movies">
-  </header>
+  <input id="search" type="search" placeholder="Search movies and videos...">
+</header>
 
-  <main id="home">
-    <section class="hero">
-      <div class="hero-content">
-        <span class="eyebrow">YOUR ENTERTAINMENT HUB</span>
-        <h1>YOUR NEXT<br>FAVOURITE MOVIE.</h1>
-        <p>Discover videos, explore your collection, and find something great to watch.</p>
-        <a href="#movies" class="primary-btn">Explore Movies →</a>
-        <a href="#my-list" class="secondary-btn">♡ My List</a>
-      </div>
-      <div class="hero-art" aria-hidden="true">
-        <div class="art-circle"></div>
-        <div class="art-play">▶</div>
-        <div class="art-label">CINEMA · YOUR WAY</div>
-      </div>
-    </section>
-
-    <section class="section" id="movies">
-      <div class="section-heading">
-        <div>
-          <span class="eyebrow">HANDPICKED FOR YOU</span>
-          <h2>Trending Videos</h2>
-        </div>
-        <span class="muted" id="movieCount">0 titles</span>
-      </div>
-
-      <div class="filters" id="filters">
-        <button class="filter active" data-category="All">All</button>
-        <button class="filter" data-category="Action">Action</button>
-        <button class="filter" data-category="Drama">Drama</button>
-        <button class="filter" data-category="Comedy">Comedy</button>
-        <button class="filter" data-category="Entertainment">Entertainment</button>
-      </div>
-
-      <div class="movie-grid" id="movieGrid"></div>
-      <p class="empty hidden" id="emptyMessage">No videos found. Try another search.</p>
-    </section>
-
-    <section class="section discover-banner" id="series">
-      <div>
-        <span class="eyebrow">YOUR PERSONAL COLLECTION</span>
-        <h2>Great videos.<br>One destination.</h2>
-        <p>Save videos to your list and come back to them anytime on this device.</p>
-      </div>
-      <a href="#movies" class="primary-btn">Browse Collection →</a>
-    </section>
-
-    <section class="section" id="my-list">
-      <div class="section-heading">
-        <div>
-          <span class="eyebrow">SAVED FOR LATER</span>
-          <h2>My List</h2>
-        </div>
-      </div>
-      <div class="movie-grid" id="savedGrid"></div>
-      <p class="empty" id="savedEmpty">Your list is empty. Tap ♡ on a video to save it.</p>
-    </section>
-  </main>
-
-  <div class="modal hidden" id="playerModal" role="dialog"
-       aria-modal="true" aria-label="Video player">
-    <div class="player-panel">
-      <div class="player-header">
-        <h2 id="playerTitle">Now Playing</h2>
-        <button id="closePlayer" class="close-btn" aria-label="Close player">✕</button>
-      </div>
-      <div class="player-frame" id="playerFrame"></div>
-      <p class="player-note">Playback depends on the video's availability and embedding permissions.</p>
+<main id="home">
+  <section class="hero">
+    <div class="hero-copy">
+      <p class="eyebrow">YOUR ENTERTAINMENT HUB</p>
+      <h1>YOUR NEXT<br>FAVOURITE <span class="blue">MOVIE.</span></h1>
+      <p class="hero-description">
+        Discover videos, explore your collection, and find something great to watch.
+      </p>
+      <a class="primary-btn" href="#discover">Explore Movies <span>→</span></a>
+      <button class="secondary-btn" id="heroListButton">♡ My List</button>
     </div>
+
+    <div class="hero-art">
+      <div class="orbit"><span>▶</span></div>
+      <p>C I N E M A &nbsp; · &nbsp; Y O U R &nbsp; W A Y</p>
+    </div>
+  </section>
+
+  <section class="section" id="discover">
+    <div class="section-heading">
+      <div>
+        <p class="eyebrow">HANDPICKED FOR YOU</p>
+        <h2>Trending Videos</h2>
+      </div>
+      <span id="movieCount">0 titles</span>
+    </div>
+
+    <div class="filters" id="filters">
+      <button class="filter active" data-category="All">All</button>
+      <button class="filter" data-category="Action">Action</button>
+      <button class="filter" data-category="Drama">Drama</button>
+      <button class="filter" data-category="Comedy">Comedy</button>
+      <button class="filter" data-category="Entertainment">Entertainment</button>
+    </div>
+
+    <div class="movie-grid" id="movieGrid"></div>
+    <p id="emptyMessage" class="empty-message" hidden>
+      No videos found. Try another search.
+    </p>
+  </section>
+
+  <section class="collection-banner">
+    <div>
+      <p class="eyebrow">YOUR PERSONAL COLLECTION</p>
+      <h2>Great videos.<br>One destination.</h2>
+      <p>Save videos to your list and come back to them anytime on this device.</p>
+    </div>
+    <a class="primary-btn" href="#discover">Browse Collection →</a>
+  </section>
+
+  <section class="section" id="my-list">
+    <div class="section-heading">
+      <div>
+        <p class="eyebrow">SAVED FOR LATER</p>
+        <h2>My List</h2>
+      </div>
+    </div>
+    <div class="movie-grid" id="savedGrid"></div>
+    <p id="savedEmpty" class="empty-message">
+      Your list is empty. Tap ♡ on a video to save it.
+    </p>
+  </section>
+</main>
+
+<footer>
+  <a class="brand" href="#home">▶ CINE<span class="blue">SCOPE</span></a>
+  <p>Your personal video discovery space.</p>
+</footer>
+
+<div class="modal" id="videoModal" aria-hidden="true">
+  <div class="modal-panel">
+    <div class="modal-heading">
+      <div>
+        <p class="eyebrow">NOW PLAYING</p>
+        <h2 id="modalTitle">Video</h2>
+      </div>
+      <button id="closeModal" class="close-btn" aria-label="Close video">✕</button>
+    </div>
+    <div id="playerContainer" class="player-container"></div>
+    <p class="playback-note">
+      Playback depends on the video's availability and embedding permissions.
+    </p>
   </div>
+</div>
 
-  <footer>
-    <a href="#home" class="brand">▶ CINE<span class="blue">SCOPE</span></a>
-    <p>Discover videos. Build your own watchlist.</p>
-  </footer>
-
-  <script src="script.js"></script>
+<script src="script.js"></script>
 </body>
 </html>
-```
