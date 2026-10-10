@@ -1,209 +1,235 @@
+```javascript
+// Add or edit your YouTube videos here.
+// Use the video ID from a YouTube link.
+// Example: https://youtu.be/eAfsQoBngKY -> eAfsQoBngKY
 
 const movies = [
   {
-    title: "Sample Movie 1",
+    title: "Movie 1",
     category: "Action",
-    year: "2025",
-    rating: "8.4",
     id: "eAfsQoBngKY"
   },
   {
-    title: "Sample Movie 2",
+    title: "Movie 2",
     category: "Entertainment",
-    year: "2025",
-    rating: "7.8",
     id: "V_pGNyKNrJw"
   },
   {
-    title: "Sample Movie 3",
+    title: "Movie 3",
     category: "Drama",
-    year: "2025",
-    rating: "8.1",
     id: "pjfXpRPHeVY"
   },
   {
-    title: "Sample Movie 4",
+    title: "Movie 4",
     category: "Featured",
-    year: "2025",
-    rating: "7.6",
     id: "CHWwf9nEXbI"
   },
   {
-    title: "Dhurandhar The Revenge",
-    category: "Action",
-    year: "2026",
-    rating: "8.2",
-    id: "QPuWL0ram2I"
-  },
-  {
-    title: "Movie 6",
-    category: "New Addition",
-    year: "2025",
-    rating: "7.9",
+    title: "Movie 5",
+    category: "Entertainment",
     id: "cU1zdg61yT4"
   }
 ];
 
-const movieGrid = document.getElementById("movieGrid");
-const savedGrid = document.getElementById("savedGrid");
+const gallery = document.getElementById("movieGrid");
+const savedGallery = document.getElementById("savedGrid");
 const searchInput = document.getElementById("search");
 const movieCount = document.getElementById("movieCount");
-const noResults = document.getElementById("noResults");
-const emptySaved = document.getElementById("emptySaved");
-const modal = document.getElementById("videoModal");
-const videoFrame = document.getElementById("videoFrame");
-const modalTitle = document.getElementById("modalTitle");
+const emptyMessage = document.getElementById("emptyMessage");
+const savedEmpty = document.getElementById("savedEmpty");
+const modal = document.getElementById("playerModal");
+const playerFrame = document.getElementById("playerFrame");
+const playerTitle = document.getElementById("playerTitle");
 
-let savedIds = [];
+let activeCategory = "All";
+let currentMovies = movies;
 
-try {
-  savedIds = JSON.parse(localStorage.getItem("cinescapeSaved") || "[]");
-  if (!Array.isArray(savedIds)) savedIds = [];
-} catch {
-  savedIds = [];
+function getSavedIds() {
+  try {
+    return JSON.parse(localStorage.getItem("cinescope-list") || "[]");
+  } catch {
+    return [];
+  }
 }
 
-function posterUrl(movie) {
-  return `https://img.youtube.com/vi/${movie.id}/hqdefault.jpg`;
+function saveIds(ids) {
+  try {
+    localStorage.setItem("cinescope-list", JSON.stringify(ids));
+  } catch {
+    alert("Your browser could not save the list.");
+  }
+}
+
+function getThumbnail(movie) {
+  return `https://i.ytimg.com/vi/${encodeURIComponent(movie.id)}/hqdefault.jpg`;
 }
 
 function createCard(movie) {
-  const isSaved = savedIds.includes(movie.id);
+  const saved = getSavedIds().includes(movie.id);
   const card = document.createElement("article");
   card.className = "movie-card";
 
-  const poster = document.createElement("button");
+  const poster = document.createElement("div");
   poster.className = "poster";
-  poster.type = "button";
-  poster.setAttribute("aria-label", `Play ${movie.title}`);
 
-  const img = document.createElement("img");
-  img.src = posterUrl(movie);
-  img.alt = `${movie.title} thumbnail`;
-  img.loading = "lazy";
-  img.onerror = () => {
-    img.style.display = "none";
+  const image = document.createElement("img");
+  image.src = getThumbnail(movie);
+  image.alt = `${movie.title} poster`;
+  image.loading = "lazy";
+  image.onerror = () => {
+    image.onerror = null;
+    image.src = "https://placehold.co/640x400/10243a/47b8ff?text=Video";
   };
 
-  const play = document.createElement("span");
-  play.className = "play-icon";
-  play.textContent = "▶";
+  const playOverlay = document.createElement("div");
+  playOverlay.className = "play-overlay";
 
-  poster.append(img, play);
-  poster.addEventListener("click", () => openVideo(movie));
+  const playButton = document.createElement("button");
+  playButton.className = "play-button";
+  playButton.textContent = "▶";
+  playButton.setAttribute("aria-label", `Play ${movie.title}`);
+  playButton.addEventListener("click", () => openPlayer(movie));
 
-  const content = document.createElement("div");
-  content.className = "card-content";
+  const saveButton = document.createElement("button");
+  saveButton.className = `save-button${saved ? " saved" : ""}`;
+  saveButton.textContent = saved ? "♥" : "♡";
+  saveButton.setAttribute("aria-label", saved ? "Remove from My List" : "Save to My List");
+  saveButton.addEventListener("click", () => toggleSaved(movie.id));
 
-  const titleRow = document.createElement("div");
-  titleRow.className = "card-title-row";
+  playOverlay.appendChild(playButton);
+  poster.append(image, playOverlay, saveButton);
+
+  const info = document.createElement("div");
+  info.className = "movie-info";
 
   const title = document.createElement("h3");
   title.textContent = movie.title;
 
-  const saveButton = document.createElement("button");
-  saveButton.className = `save-btn ${isSaved ? "saved" : ""}`;
-  saveButton.type = "button";
-  saveButton.textContent = isSaved ? "♥" : "♡";
-  saveButton.setAttribute("aria-label", isSaved ? "Remove from My List" : "Add to My List");
-  saveButton.addEventListener("click", () => toggleSaved(movie.id));
-
-  titleRow.append(title, saveButton);
-
   const meta = document.createElement("div");
-  meta.className = "card-meta";
-
-  const rating = document.createElement("span");
-  rating.className = "rating";
-  rating.textContent = `★ ${movie.rating}`;
-
-  const year = document.createElement("span");
-  year.textContent = movie.year;
-
-  meta.append(rating, year);
+  meta.className = "movie-meta";
 
   const category = document.createElement("span");
-  category.className = "card-category";
+  category.className = "category-tag";
   category.textContent = movie.category;
 
-  content.append(titleRow, meta, category);
-  card.append(poster, content);
+  const type = document.createElement("span");
+  type.textContent = "▶ YouTube";
+
+  meta.append(category, type);
+  info.append(title, meta);
+  card.append(poster, info);
+
+  // Clicking the poster or title also opens the video.
+  poster.addEventListener("dblclick", () => openPlayer(movie));
+  title.style.cursor = "pointer";
+  title.addEventListener("click", () => openPlayer(movie));
 
   return card;
 }
 
 function renderMovies() {
   const query = searchInput.value.trim().toLowerCase();
-  const filtered = movies.filter(movie =>
-    `${movie.title} ${movie.category} ${movie.year}`.toLowerCase().includes(query)
-  );
 
-  movieGrid.replaceChildren(...filtered.map(createCard));
-  movieCount.textContent = `${filtered.length} ${filtered.length === 1 ? "title" : "titles"}`;
-  noResults.hidden = filtered.length !== 0;
+  currentMovies = movies.filter(movie => {
+    const matchesSearch =
+      movie.title.toLowerCase().includes(query) ||
+      movie.category.toLowerCase().includes(query);
 
-  renderSaved();
+    const matchesCategory =
+      activeCategory === "All" || movie.category === activeCategory;
+
+    return matchesSearch && matchesCategory;
+  });
+
+  gallery.replaceChildren();
+
+  currentMovies.forEach(movie => {
+    gallery.appendChild(createCard(movie));
+  });
+
+  movieCount.textContent =
+    `${currentMovies.length} ${currentMovies.length === 1 ? "title" : "titles"}`;
+
+  emptyMessage.classList.toggle("hidden", currentMovies.length > 0);
 }
 
 function renderSaved() {
+  const savedIds = getSavedIds();
   const savedMovies = movies.filter(movie => savedIds.includes(movie.id));
 
-  savedGrid.replaceChildren(...savedMovies.map(createCard));
-  emptySaved.hidden = savedMovies.length !== 0;
-}
+  savedGallery.replaceChildren();
 
-function saveList() {
-  try {
-    localStorage.setItem("cinescapeSaved", JSON.stringify(savedIds));
-  } catch {
-    alert("Your browser could not save this list. Check your storage settings.");
-  }
+  savedMovies.forEach(movie => {
+    savedGallery.appendChild(createCard(movie));
+  });
+
+  savedEmpty.classList.toggle("hidden", savedMovies.length > 0);
 }
 
 function toggleSaved(id) {
-  if (savedIds.includes(id)) {
-    savedIds = savedIds.filter(savedId => savedId !== id);
-  } else {
-    savedIds.push(id);
-  }
+  const savedIds = getSavedIds();
+  const updatedIds = savedIds.includes(id)
+    ? savedIds.filter(savedId => savedId !== id)
+    : [...savedIds, id];
 
-  saveList();
+  saveIds(updatedIds);
   renderMovies();
+  renderSaved();
 }
 
-function openVideo(movie) {
-  modalTitle.textContent = movie.title;
-  videoFrame.replaceChildren();
+function openPlayer(movie) {
+  // The YouTube owner must allow embedding for playback to work.
+  const url = `https://www.youtube-nocookie.com/embed/${encodeURIComponent(movie.id)}?autoplay=1&rel=0`;
+
+  playerTitle.textContent = movie.title;
+  playerFrame.replaceChildren();
 
   const iframe = document.createElement("iframe");
-  iframe.src = `https://www.youtube-nocookie.com/embed/${movie.id}?autoplay=1&rel=0`;
+  iframe.src = url;
   iframe.title = movie.title;
   iframe.allow = "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share";
   iframe.allowFullscreen = true;
   iframe.referrerPolicy = "strict-origin-when-cross-origin";
 
-  videoFrame.appendChild(iframe);
-  modal.classList.add("open");
-  modal.setAttribute("aria-hidden", "false");
-  document.body.style.overflow = "hidden";
+  playerFrame.appendChild(iframe);
+  modal.classList.remove("hidden");
+  document.body.classList.add("modal-open");
 }
 
-function closeVideo() {
-  modal.classList.remove("open");
-  modal.setAttribute("aria-hidden", "true");
-  videoFrame.replaceChildren();
-  document.body.style.overflow = "";
+function closePlayer() {
+  modal.classList.add("hidden");
+  document.body.classList.remove("modal-open");
+  playerFrame.replaceChildren();
 }
 
 searchInput.addEventListener("input", renderMovies);
-document.getElementById("closeModal").addEventListener("click", closeVideo);
+
+document.getElementById("filters").addEventListener("click", event => {
+  const button = event.target.closest("button[data-category]");
+  if (!button) return;
+
+  activeCategory = button.dataset.category;
+
+  document.querySelectorAll(".filter").forEach(filter => {
+    filter.classList.toggle("active", filter === button);
+  });
+
+  renderMovies();
+});
+
+document.getElementById("closePlayer").addEventListener("click", closePlayer);
 
 modal.addEventListener("click", event => {
-  if (event.target === modal) closeVideo();
+  if (event.target === modal) closePlayer();
 });
 
 document.addEventListener("keydown", event => {
-  if (event.key === "Escape") closeVideo();
+  if (event.key === "Escape" && !modal.classList.contains("hidden")) {
+    closePlayer();
+  }
 });
 
+// Initial display
 renderMovies();
+renderSaved();
+```
