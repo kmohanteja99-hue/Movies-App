@@ -1,465 +1,194 @@
 
-/* ========================================
-   PREMIUM STREAMING APP THEME
-======================================== */
-
 :root {
   --bg: #071421;
-  --surface: #101f30;
-  --surface-hover: #1b3046;
+  --panel: #102338;
   --blue: #00a8e1;
-  --blue-light: #48c8ff;
-  --text: #f5f9ff;
-  --muted: #aab9c9;
-  --border: #263d52;
+  --text: #f4f8fc;
+  --muted: #b3c2d1;
+  --border: #294258;
 }
 
 * {
   box-sizing: border-box;
 }
 
-html {
-  scroll-behavior: smooth;
-}
-
 body {
   margin: 0;
   min-height: 100vh;
-  background: var(--bg);
+  background: radial-gradient(ellipse at top, #102b43, #071421 65%);
   color: var(--text);
   font-family: Arial, Helvetica, sans-serif;
-  line-height: 1.5;
 }
 
-/* ========================================
-   TOP HEADER
-======================================== */
-
-.header {
-  position: relative;
-  padding: 27px 5%;
-  text-align: left;
-  background: linear-gradient(110deg, #071421, #102c46);
-  border-bottom: 1px solid var(--border);
-}
-
-.header h1 {
-  margin: 0;
-  font-size: clamp(26px, 4vw, 38px);
-  font-weight: 800;
-  letter-spacing: -1px;
-  color: #ffffff;
-}
-
-.subtitle {
-  margin: 5px 0 20px;
-  color: var(--muted);
-  font-size: 15px;
-}
-
-/* Search field */
-
-#search {
-  display: block;
-  width: 100%;
-  max-width: 560px;
-  padding: 14px 19px;
-  border: 1px solid #3a536b;
-  border-radius: 8px;
-  outline: none;
-  background: #0a1928;
-  color: white;
-  font-size: 15px;
-  transition: border-color 0.2s, box-shadow 0.2s;
-}
-
-#search::placeholder {
-  color: #91a6ba;
-}
-
-#search:focus {
-  border-color: var(--blue);
-  box-shadow: 0 0 0 3px #00a8e122;
-}
-
-/* ========================================
-   MAIN CONTENT
-======================================== */
-
-.main {
-  width: 100%;
-  max-width: 1600px;
-  margin: auto;
-  padding: 32px 5% 55px;
-}
-
-.shelf {
-  width: 100%;
-}
-
-.section-heading {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  margin-bottom: 22px;
-}
-
-.section-heading h2 {
-  margin: 0;
-  padding-left: 13px;
-  border-left: 4px solid var(--blue);
-  font-size: clamp(20px, 3vw, 26px);
-  font-weight: 750;
-  color: #ffffff;
-}
-
-#movieCount {
-  color: var(--muted);
-  font-size: 14px;
-  white-space: nowrap;
-}
-
-/* ========================================
-   MOVIE GALLERY
-======================================== */
-
-.movie-gallery {
-  display: grid;
-  grid-template-columns: repeat(
-    auto-fill,
-    minmax(175px, 1fr)
-  );
-  gap: 25px 19px;
-}
-
-/* Movie cards */
-
-.movie-card {
-  min-width: 0;
-  overflow: hidden;
-  border: 1px solid transparent;
-  border-radius: 10px;
-  background: var(--surface);
-  box-shadow: 0 5px 16px #00000030;
-  transition:
-    transform 0.25s ease,
-    border-color 0.25s ease,
-    box-shadow 0.25s ease;
-}
-
-.movie-card:hover {
-  transform: translateY(-5px) scale(1.015);
-  border-color: #167eaa;
-  box-shadow: 0 12px 28px #00000070;
-}
-
-/* Poster area */
-
-.poster {
-  position: relative;
-  width: 100%;
-  aspect-ratio: 2 / 3;
-  overflow: hidden;
-  background: linear-gradient(
-    145deg,
-    #193d59,
-    #101b2b,
-    #071421
-  );
-  cursor: pointer;
-}
-
-.poster img {
-  display: block;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  transition: transform 0.4s ease;
-}
-
-.movie-card:hover .poster img {
-  transform: scale(1.06);
-}
-
-/* Play button overlay */
-
-.play-overlay {
-  position: absolute;
-  inset: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: linear-gradient(
-    to top,
-    #06111bd9,
-    transparent 65%
-  );
-  opacity: 0.9;
-  transition: background 0.2s;
-}
-
-.movie-card:hover .play-overlay {
-  background: #06111b55;
-}
-
-.play-button {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 55px;
-  height: 55px;
-  padding-left: 5px;
-  border: 2px solid #ffffffd9;
-  border-radius: 50%;
-  background: #071421d9;
-  color: white;
-  font-size: 22px;
-  cursor: pointer;
-  transition:
-    background 0.2s,
-    transform 0.2s;
-}
-
-.play-button:hover {
-  background: var(--blue);
-  border-color: var(--blue);
-  transform: scale(1.12);
-}
-
-/* Movie title and category */
-
-.movie-info {
-  padding: 13px 12px 15px;
-}
-
-.movie-info h3 {
-  margin: 0 0 6px;
-  color: #ffffff;
-  font-size: 16px;
-  font-weight: 700;
-  line-height: 1.4;
-  overflow-wrap: anywhere;
-}
-
-.movie-info p {
-  margin: 0;
-  color: #b5c8d9;
-  font-size: 13px;
-}
-
-/* ========================================
-   VIDEO PLAYER MODAL
-======================================== */
-
-.modal {
+.password-screen {
   position: fixed;
   inset: 0;
-  z-index: 1000;
+  z-index: 2000;
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 20px;
-  background: #020812ed;
-  backdrop-filter: blur(8px);
+  background: radial-gradient(ellipse at top, #163d5d, #071421 65%);
 }
 
-.modal[hidden] {
-  display: none;
+.password-box {
+  width: min(100%, 410px);
+  padding: 32px 26px;
+  border: 1px solid #31516b;
+  border-radius: 16px;
+  background: #0d2032;
+  box-shadow: 0 25px 80px #0008;
+  text-align: center;
 }
 
-.modal-content {
-  width: min(100%, 1000px);
-  overflow: hidden;
-  border: 1px solid #294a63;
-  border-radius: 12px;
-  background: #0c1927;
-  box-shadow: 0 25px 80px #000000a0;
+.lock-icon {
+  font-size: 48px;
 }
 
-.modal-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 15px;
-  padding: 14px 18px;
-  background: #10253a;
-  border-bottom: 1px solid var(--border);
-}
-
-.modal-header h2 {
-  margin: 0;
+.password-box h1 {
   color: white;
-  font-size: 18px;
 }
 
-.close-button {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-width: 40px;
-  min-height: 40px;
-  border: 1px solid #3b5369;
+.password-box p {
+  color: var(--muted);
+}
+
+.password-box input {
+  width: 100%;
+  padding: 14px;
+  margin: 10px 0;
+  border: 1px solid #3a566e;
   border-radius: 8px;
-  background: #1b3044;
+  background: #071421;
   color: white;
-  font-size: 21px;
+  font-size: 16px;
+}
+
+.password-box button {
+  width: 100%;
+  padding: 14px;
+  border: 0;
+  border-radius: 8px;
+  background: var(--blue);
+  color: #03121d;
+  font-weight: bold;
+  font-size: 16px;
   cursor: pointer;
 }
 
-.close-button:hover {
-  background: #b82940;
-  border-color: #b82940;
+#passwordError {
+  color: #ff8d9a;
 }
 
-.video-container {
-  width: 100%;
-  aspect-ratio: 16 / 9;
-  background: #000;
+.hidden {
+  display: none !important;
 }
 
-.video-container iframe {
+#movieApp > header {
+  padding: 28px 5%;
+  background: linear-gradient(110deg, #071421, #12334e);
+  border-bottom: 1px solid var(--border);
+}
+
+header h1 {
+  margin: 0 0 18px;
+  color: white;
+  font-size: clamp(27px, 4vw, 38px);
+}
+
+#search {
+  display: block;
+  width: min(100%, 600px);
+  padding: 14px 18px;
+  border: 1px solid #3b5870;
+  border-radius: 9px;
+  outline: none;
+  background: #081827;
+  color: white;
+  font-size: 16px;
+}
+
+#search::placeholder {
+  color: #9bb0c3;
+}
+
+#search:focus {
+  border-color: var(--blue);
+  box-shadow: 0 0 0 3px #00a8e126;
+}
+
+.container {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 22px;
+  max-width: 1600px;
+  margin: auto;
+  padding: 28px 5% 55px;
+}
+
+.movie {
+  min-width: 0;
+  overflow: hidden;
+  padding: 12px;
+  border: 1px solid #263e53;
+  border-radius: 13px;
+  background: linear-gradient(145deg, #13283a, #0d1c2a);
+  box-shadow: 0 8px 22px #0004;
+  transition: transform .22s, border-color .22s, box-shadow .22s;
+}
+
+.movie:hover {
+  transform: translateY(-4px);
+  border-color: #167eaa;
+  box-shadow: 0 14px 30px #0007;
+}
+
+.movie h2 {
+  margin: 0 0 12px;
+  color: #f7fbff;
+  font-size: 17px;
+  line-height: 1.4;
+}
+
+.movie iframe {
   display: block;
   width: 100%;
-  height: 100%;
-  border: 0;
+  aspect-ratio: 16 / 9;
+  border: 1px solid #31485d;
+  border-radius: 9px;
+  background: #02070d;
 }
 
-/* ========================================
-   EMPTY SEARCH MESSAGE
-======================================== */
-
-.no-results {
-  padding: 45px 15px;
-  text-align: center;
-  color: var(--muted);
-  font-size: 17px;
-}
-
-.no-results[hidden] {
-  display: none;
-}
-
-/* ========================================
-   FOOTER
-======================================== */
-
-footer {
-  padding: 24px 15px;
-  border-top: 1px solid var(--border);
-  background: #06101b;
-  color: #91a6ba;
-  text-align: center;
-  font-size: 14px;
-}
-
-/* ========================================
-   TABLETS
-======================================== */
-
-@media (min-width: 601px) and (max-width: 900px) {
-  .movie-gallery {
+@media (max-width: 1000px) {
+  .container {
     grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 20px 15px;
-  }
-
-  .main {
-    padding-left: 24px;
-    padding-right: 24px;
   }
 }
 
-/* ========================================
-   MOBILE
-======================================== */
-
-@media (max-width: 600px) {
-  .header {
-    padding: 23px 17px;
+@media (max-width: 650px) {
+  #movieApp > header {
+    padding: 23px 16px;
   }
 
-  .header h1 {
-    font-size: 28px;
-  }
-
-  .subtitle {
-    font-size: 14px;
-  }
-
-  #search {
-    max-width: none;
-    padding: 13px 15px;
-  }
-
-  .main {
-    padding: 25px 13px 40px;
-  }
-
-  .section-heading {
-    margin-bottom: 17px;
-  }
-
-  .section-heading h2 {
-    font-size: 19px;
-    padding-left: 9px;
-  }
-
-  #movieCount {
-    font-size: 12px;
-  }
-
-  .movie-gallery {
+  .container {
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 17px 12px;
+    gap: 12px;
+    padding: 18px 12px 35px;
   }
 
-  .movie-card {
-    border-radius: 8px;
-  }
-
-  .movie-info {
-    padding: 10px;
-  }
-
-  .movie-info h3 {
-    font-size: 14px;
-  }
-
-  .movie-info p {
-    font-size: 12px;
-  }
-
-  .play-button {
-    width: 45px;
-    height: 45px;
-    font-size: 19px;
-  }
-
-  .modal {
+  .movie {
     padding: 8px;
+    border-radius: 9px;
   }
 
-  .modal-content {
-    border-radius: 8px;
-  }
-
-  .modal-header {
-    padding: 10px;
-  }
-
-  .modal-header h2 {
-    font-size: 15px;
+  .movie h2 {
+    font-size: 14px;
+    margin-bottom: 8px;
   }
 }
 
-/* Respect reduced motion settings */
-
-@media (prefers-reduced-motion: reduce) {
-  *,
-  *::before,
-  *::after {
-    scroll-behavior: auto !important;
-    transition-duration: 0.01ms !important;
+@media (max-width: 360px) {
+  .container {
+    grid-template-columns: 1fr;
   }
 }
-
