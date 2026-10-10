@@ -1,4 +1,4 @@
-
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -10,8 +10,35 @@
 </head>
 <body>
 
+<!-- PASSWORD SCREEN -->
+<div id="passwordScreen" class="password-screen">
+  <div class="password-box">
+    <div class="login-logo">▶</div>
+    <h1>VARMATEJA <span>MOVIES</span></h1>
+    <p>Your personal movie destination</p>
+
+    <form id="loginForm">
+      <input
+        id="passwordInput"
+        type="password"
+        placeholder="Enter password"
+        autocomplete="current-password"
+        required
+      >
+      <button type="submit">Unlock Movies →</button>
+    </form>
+
+    <p id="passwordError" class="password-error"></p>
+  </div>
+</div>
+
+<!-- MOVIE APP -->
+<div id="movieApp" hidden>
+
 <header class="navbar">
-  <a class="brand" href="#home"><span>▶</span> CINE<span class="blue">SCOPE</span></a>
+  <a class="brand" href="#home">
+    ▶ VARMATEJA <span class="blue">MOVIES</span>
+  </a>
 
   <nav>
     <a href="#home">Home</a>
@@ -20,24 +47,41 @@
     <a href="#my-list">My List <span id="listCount">0</span></a>
   </nav>
 
-  <input id="search" type="search" placeholder="Search movies and videos...">
+  <input
+    id="search"
+    type="search"
+    placeholder="Search movies and videos..."
+    aria-label="Search movies and videos"
+  >
 </header>
 
 <main id="home">
+
   <section class="hero">
     <div class="hero-copy">
-      <p class="eyebrow">YOUR ENTERTAINMENT HUB</p>
-      <h1>YOUR NEXT<br>FAVOURITE <span class="blue">MOVIE.</span></h1>
+      <p class="eyebrow">WELCOME TO VARMATEJA MOVIES</p>
+
+      <h1>
+        YOUR NEXT<br>
+        FAVOURITE <span class="blue">MOVIE.</span>
+      </h1>
+
       <p class="hero-description">
         Discover videos, explore your collection, and find something great to watch.
       </p>
-      <a class="primary-btn" href="#discover">Explore Movies <span>→</span></a>
-      <button class="secondary-btn" id="heroListButton">♡ My List</button>
+
+      <a class="primary-btn" href="#discover">
+        Explore Movies <span>→</span>
+      </a>
+
+      <button class="secondary-btn" id="heroListButton" type="button">
+        ♡ My List
+      </button>
     </div>
 
     <div class="hero-art">
       <div class="orbit"><span>▶</span></div>
-      <p>C I N E M A &nbsp; · &nbsp; Y O U R &nbsp; W A Y</p>
+      <p>CINEMA · YOUR WAY</p>
     </div>
   </section>
 
@@ -47,6 +91,7 @@
         <p class="eyebrow">HANDPICKED FOR YOU</p>
         <h2>Trending Videos</h2>
       </div>
+
       <span id="movieCount">0 titles</span>
     </div>
 
@@ -59,6 +104,7 @@
     </div>
 
     <div class="movie-grid" id="movieGrid"></div>
+
     <p id="emptyMessage" class="empty-message" hidden>
       No videos found. Try another search.
     </p>
@@ -68,9 +114,12 @@
     <div>
       <p class="eyebrow">YOUR PERSONAL COLLECTION</p>
       <h2>Great videos.<br>One destination.</h2>
-      <p>Save videos to your list and come back to them anytime on this device.</p>
+      <p>Save videos to your list and find them again on this device.</p>
     </div>
-    <a class="primary-btn" href="#discover">Browse Collection →</a>
+
+    <a class="primary-btn" href="#discover">
+      Browse Collection →
+    </a>
   </section>
 
   <section class="section" id="my-list">
@@ -80,34 +129,54 @@
         <h2>My List</h2>
       </div>
     </div>
+
     <div class="movie-grid" id="savedGrid"></div>
+
     <p id="savedEmpty" class="empty-message">
       Your list is empty. Tap ♡ on a video to save it.
     </p>
   </section>
+
 </main>
 
 <footer>
-  <a class="brand" href="#home">▶ CINE<span class="blue">SCOPE</span></a>
+  <a class="brand" href="#home">
+    ▶ VARMATEJA <span class="blue">MOVIES</span>
+  </a>
+
   <p>Your personal video discovery space.</p>
 </footer>
 
+<!-- VIDEO PLAYER -->
 <div class="modal" id="videoModal" aria-hidden="true">
   <div class="modal-panel">
+
     <div class="modal-heading">
       <div>
         <p class="eyebrow">NOW PLAYING</p>
         <h2 id="modalTitle">Video</h2>
       </div>
-      <button id="closeModal" class="close-btn" aria-label="Close video">✕</button>
+
+      <button
+        id="closeModal"
+        class="close-btn"
+        type="button"
+        aria-label="Close video"
+      >✕</button>
     </div>
+
     <div id="playerContainer" class="player-container"></div>
+
     <p class="playback-note">
       Playback depends on the video's availability and embedding permissions.
     </p>
+
   </div>
+</div>
+
 </div>
 
 <script src="script.js"></script>
 </body>
 </html>
+```
