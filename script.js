@@ -27,6 +27,11 @@ const movies = [
     category: "Entertainment",
     id: "cU1zdg61yT4"
   }
+  {
+    title: "Movie 6",
+    category: "New",
+    id: "nVgNbSwLWXU"
+  },
 ];
 
 const movieGrid = document.getElementById("movieGrid");
