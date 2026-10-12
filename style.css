@@ -1,242 +1,196 @@
 ```css
-/* ================= GENERAL ================= */
+/* GENERAL */
+* {
+  box-sizing: border-box;
+}
 
 body {
   margin: 0;
   font-family: Arial, sans-serif;
-  background: #050505;
-  color: white;
+  background: #030711;
+  color: #f5f7ff;
 }
 
-
-/* ================= PASSWORD SCREEN ================= */
-
+/* PASSWORD SCREEN */
 .password-screen {
   position: fixed;
   inset: 0;
   width: 100%;
-  height: 100vh;
-
-  background: radial-gradient(circle at center, #071a35 0%, #050505 65%);
-
+  min-height: 100vh;
+  background: radial-gradient(circle at top, #082653, #030711 65%);
   display: flex;
   justify-content: center;
   align-items: center;
   z-index: 99999;
 }
 
-
 .password-box {
-  width: 350px;
-  max-width: 85%;
+  width: 380px;
+  max-width: 90%;
   padding: 35px;
-
-  background: rgba(8, 8, 12, 0.97);
-
-  border: 1px solid #126bff;
-  border-radius: 20px;
+  background: #080e1c;
+  border: 1px solid #087bff;
+  border-radius: 18px;
   text-align: center;
-
-  box-shadow:
-    0 0 20px rgba(18, 107, 255, 0.35),
-    0 0 35px rgba(255, 0, 50, 0.12);
-
+  box-shadow: 0 0 35px #0066ff35, 0 0 20px #ff174425;
   animation: passwordBox 0.5s ease;
 }
 
-
 @keyframes passwordBox {
-  from {
-    opacity: 0;
-    transform: scale(0.8);
-  }
-
-  to {
-    opacity: 1;
-    transform: scale(1);
-  }
+  from { opacity: 0; transform: scale(.85); }
+  to { opacity: 1; transform: scale(1); }
 }
-
 
 .lock-icon {
   font-size: 60px;
   margin-bottom: 10px;
 }
 
-
 .password-box h1 {
-  margin: 10px 0;
-  color: #2583ff;
-  font-size: 30px;
+  color: #42a5ff;
+  font-size: 28px;
 }
 
-
 .password-box p {
-  color: #c4c4c4;
+  color: #aab6cc;
   font-size: 15px;
 }
 
-
 .password-box input {
   width: 100%;
-  box-sizing: border-box;
   padding: 14px;
-  margin-top: 15px;
-  margin-bottom: 15px;
-
-  background: #080b12;
+  margin: 15px 0;
+  background: #050914;
   color: white;
-  border: 1px solid #343b4a;
-  border-radius: 8px;
+  border: 1px solid #283957;
+  border-radius: 9px;
   outline: none;
   font-size: 16px;
 }
 
-
 .password-box input:focus {
-  border-color: #2583ff;
-  box-shadow: 0 0 10px rgba(37, 131, 255, 0.4);
+  border-color: #1684ff;
+  box-shadow: 0 0 12px #1684ff45;
 }
-
 
 .password-box button {
   width: 100%;
   padding: 14px;
   border: none;
-  border-radius: 8px;
-
-  background: linear-gradient(90deg, #075bdb, #e50925);
+  border-radius: 9px;
+  background: linear-gradient(100deg, #087bff, #e50935);
   color: white;
-
   font-size: 16px;
   font-weight: bold;
   cursor: pointer;
-  transition: 0.3s;
+  transition: .25s;
 }
-
 
 .password-box button:hover {
-  background: linear-gradient(90deg, #247cff, #ff1738);
-  transform: scale(1.02);
+  filter: brightness(1.2);
+  transform: translateY(-2px);
 }
 
-
 #passwordError {
-  color: #ff304f;
+  color: #ff405b;
   min-height: 20px;
   margin-top: 15px;
 }
 
-
-/* ================= HIDDEN ================= */
-
+/* HIDDEN */
 .hidden {
   display: none;
 }
 
-
-/* ================= HEADER ================= */
-
+/* HEADER */
 header {
-  background: #000000;
-  padding: 15px;
+  background: #050914;
+  padding: 24px 20px;
   text-align: center;
-
-  border-bottom: 2px solid #075bdb;
-  box-shadow: 0 4px 18px rgba(0, 75, 255, 0.15);
+  border-bottom: 1px solid #123b70;
+  box-shadow: 0 5px 25px #0066ff18;
 }
-
 
 header h1 {
-  margin: 0 0 10px 0;
-  color: #ffffff;
-  text-shadow: 0 0 12px rgba(37, 131, 255, 0.45);
+  margin: 0 0 18px;
+  font-size: clamp(25px, 3vw, 36px);
+  color: white;
+  text-shadow: 0 0 18px #087bff55;
 }
-
 
 #search {
-  padding: 12px;
-  width: 60%;
-  max-width: 600px;
-
-  background: #101010;
+  width: min(600px, 90%);
+  padding: 14px 18px;
+  background: #0a1222;
   color: white;
-
-  border: 1px solid #343b4a;
-  border-radius: 8px;
+  border: 1px solid #24446e;
+  border-radius: 25px;
   outline: none;
   font-size: 16px;
+  transition: .25s;
 }
-
 
 #search:focus {
-  border-color: #2583ff;
-  box-shadow: 0 0 10px rgba(37, 131, 255, 0.25);
+  border-color: #1684ff;
+  box-shadow: 0 0 15px #087bff30;
 }
 
+#search::placeholder {
+  color: #8492aa;
+}
 
-/* ================= MOVIE GRID ================= */
-
+/* MOVIE GRID */
 .container {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 20px;
-  padding: 20px;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 24px;
+  padding: 28px;
+  max-width: 1800px;
+  margin: auto;
 }
 
-
-/* ================= MOVIE CARD ================= */
-
+/* MOVIE CARDS */
 .movie {
-  background: #0d0d0f;
-  padding: 10px;
-
-  border: 1px solid #252a35;
-  border-radius: 10px;
-  transition: 0.3s;
+  min-width: 0;
+  overflow: hidden;
+  background: linear-gradient(145deg, #0c1527, #070b14);
+  padding: 12px;
+  border: 1px solid #203754;
+  border-radius: 15px;
+  transition: transform .25s, border-color .25s, box-shadow .25s;
 }
-
 
 .movie:hover {
-  transform: scale(1.03);
-
-  border-color: #126bff;
-
-  box-shadow:
-    0 0 15px rgba(18, 107, 255, 0.3),
-    0 0 10px rgba(229, 9, 37, 0.12);
+  transform: translateY(-5px);
+  border-color: #087bff;
+  box-shadow: 0 10px 28px #0066ff20, 0 0 12px #e5093510;
 }
-
 
 .movie h2 {
-  margin-top: 5px;
-  font-size: 20px;
-  color: #f5f5f5;
+  margin: 6px 0 15px;
+  font-size: 18px;
+  line-height: 1.4;
+  color: #f5f7ff;
 }
 
-
-/* ================= VIDEO ================= */
-
+/* VIDEO */
 iframe,
 video {
   width: 100%;
-  height: 200px;
+  height: 230px;
   border-radius: 10px;
   display: block;
-  border: 1px solid #222631;
+  border: 1px solid #172a44;
 }
-
 
 video {
-  background: black;
+  background: #000;
 }
 
-
-/* ================= MOBILE ================= */
-
+/* MOBILE */
 @media (max-width: 600px) {
   .password-box {
-    width: 280px;
+    width: 320px;
     padding: 25px;
   }
 
@@ -244,18 +198,23 @@ video {
     font-size: 24px;
   }
 
+  header {
+    padding: 20px 12px;
+  }
+
   #search {
-    width: 85%;
+    width: 100%;
   }
 
   .container {
     grid-template-columns: 1fr;
-    padding: 10px;
+    gap: 18px;
+    padding: 14px;
   }
 
   iframe,
   video {
-    height: 220px;
+    height: 230px;
   }
 }
 ```
