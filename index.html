@@ -1,592 +1,157 @@
-```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>My Movies App</title>
 
-  <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
+  <title>My Movie App</title>
 
-    body {
-      font-family: Arial, sans-serif;
-      background: #101018;
-      color: white;
-      min-height: 100vh;
-    }
-
-    button, input {
-      font: inherit;
-    }
-
-    button {
-      cursor: pointer;
-    }
-
-    .hidden {
-      display: none !important;
-    }
-
-    /* PASSWORD SCREEN */
-    #passwordScreen {
-      min-height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      padding: 20px;
-      background:
-        radial-gradient(circle at top, #292957, #101018 65%);
-    }
-
-    .login-box {
-      width: 100%;
-      max-width: 380px;
-      padding: 32px;
-      text-align: center;
-      background: #1b1b2b;
-      border: 1px solid #393960;
-      border-radius: 18px;
-      box-shadow: 0 15px 45px #0008;
-    }
-
-    .login-box h1 {
-      color: #55e7ff;
-      margin-bottom: 12px;
-    }
-
-    .login-box p {
-      color: #bbb;
-      margin-bottom: 22px;
-    }
-
-    .password-row {
-      display: flex;
-      gap: 8px;
-      margin-bottom: 15px;
-    }
-
-    .password-row input {
-      width: 100%;
-      min-width: 0;
-      padding: 13px;
-      background: #101018;
-      color: white;
-      border: 1px solid #454568;
-      border-radius: 8px;
-      outline: none;
-    }
-
-    .password-row input:focus {
-      border-color: #55e7ff;
-    }
-
-    .show-button {
-      padding: 0 12px;
-      background: #303047;
-      color: white;
-      border: 1px solid #454568;
-      border-radius: 8px;
-    }
-
-    .primary-button {
-      width: 100%;
-      padding: 13px;
-      border: none;
-      border-radius: 8px;
-      background: #00c9ed;
-      color: #07131a;
-      font-weight: bold;
-    }
-
-    .primary-button:hover {
-      background: #65e7ff;
-    }
-
-    #passwordError {
-      color: #ff7272;
-      min-height: 22px;
-      margin-top: 14px;
-    }
-
-    /* MOVIE APP */
-    header {
-      padding: 20px;
-      background: #1b1b2b;
-      border-bottom: 1px solid #33334a;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 15px;
-      flex-wrap: wrap;
-    }
-
-    header h1 {
-      color: #55e7ff;
-      font-size: 25px;
-    }
-
-    .header-actions {
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
-    }
-
-    .small-button {
-      padding: 10px 14px;
-      border: none;
-      border-radius: 7px;
-      background: #303047;
-      color: white;
-    }
-
-    .small-button:hover {
-      background: #454568;
-    }
-
-    .container {
-      max-width: 1200px;
-      margin: auto;
-      padding: 25px 18px;
-    }
-
-    .toolbar {
-      display: flex;
-      gap: 12px;
-      margin-bottom: 25px;
-      flex-wrap: wrap;
-    }
-
-    #search {
-      flex: 1;
-      min-width: 180px;
-      padding: 13px 15px;
-      background: #1b1b2b;
-      border: 1px solid #383852;
-      border-radius: 9px;
-      color: white;
-      outline: none;
-    }
-
-    #search:focus {
-      border-color: #55e7ff;
-    }
-
-    .upload-label {
-      padding: 13px 16px;
-      background: #00c9ed;
-      color: #07131a;
-      font-weight: bold;
-      border-radius: 9px;
-      cursor: pointer;
-    }
-
-    #movieUpload {
-      display: none;
-    }
-
-    #status {
-      color: #b8c3d5;
-      margin-bottom: 18px;
-    }
-
-    .movie-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-      gap: 20px;
-    }
-
-    .movie {
-      background: #1b1b2b;
-      border: 1px solid #33334a;
-      border-radius: 12px;
-      overflow: hidden;
-      min-width: 0;
-    }
-
-    .movie video {
-      display: block;
-      width: 100%;
-      aspect-ratio: 16 / 10;
-      background: black;
-      object-fit: contain;
-    }
-
-    .movie-info {
-      padding: 14px;
-    }
-
-    .movie-info h3 {
-      font-size: 17px;
-      overflow-wrap: anywhere;
-      margin-bottom: 12px;
-    }
-
-    .movie-actions {
-      display: flex;
-      gap: 8px;
-      flex-wrap: wrap;
-    }
-
-    .movie-actions button {
-      flex: 1;
-      min-width: 80px;
-      padding: 9px;
-      background: #303047;
-      color: white;
-      border: none;
-      border-radius: 6px;
-    }
-
-    .movie-actions button:hover {
-      background: #454568;
-    }
-
-    .movie-actions .delete-button {
-      background: #7d2938;
-    }
-
-    #emptyMessage {
-      text-align: center;
-      color: #aaa;
-      padding: 35px 10px;
-      grid-column: 1 / -1;
-    }
-
-    footer {
-      text-align: center;
-      color: #777;
-      padding: 25px;
-    }
-
-    @media (max-width: 500px) {
-      header h1 {
-        font-size: 21px;
-      }
-
-      .container {
-        padding: 18px 12px;
-      }
-
-      .movie-grid {
-        grid-template-columns: 1fr;
-      }
-
-      .login-box {
-        padding: 24px;
-      }
-    }
-  </style>
+  <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-  <!-- PASSWORD SCREEN -->
-  <section id="passwordScreen">
-    <div class="login-box">
-      <h1>🎬 My Movies</h1>
-      <p>Enter your password to unlock your movie library.</p>
+<!-- ================= PASSWORD SCREEN ================= -->
 
-      <form id="passwordForm">
-        <div class="password-row">
-          <input
-            type="password"
-            id="passwordInput"
-            placeholder="Enter password"
-            autocomplete="current-password"
-            required
-          >
-          <button
-            type="button"
-            class="show-button"
-            id="togglePassword"
-          >Show</button>
-        </div>
+<div id="passwordScreen" class="password-screen">
 
-        <button type="submit" class="primary-button">
-          🔓 Unlock App
-        </button>
+  <div class="password-box">
 
-        <p id="passwordError" role="alert"></p>
-      </form>
-    </div>
-  </section>
+    <div class="lock-icon">🔐</div>
 
-  <!-- MAIN MOVIE APP -->
-  <main id="movieApp" class="hidden">
-    <header>
-      <h1>🎬 My Movies App</h1>
+    <h1>🎬 Movies App</h1>
 
-      <div class="header-actions">
-        <button class="small-button" id="lockButton">
-          🔒 Lock
-        </button>
-      </div>
-    </header>
+    <p>Enter password to continue</p>
 
-    <div class="container">
-      <div class="toolbar">
-        <input
-          type="search"
-          id="search"
-          placeholder="🔍 Search your movies..."
-          aria-label="Search movies"
-        >
+    <input
+      type="password"
+      id="passwordInput"
+      placeholder="Enter password"
+      autocomplete="off"
+      onkeydown="if(event.key === 'Enter') checkPassword()"
+    >
 
-        <label class="upload-label" for="movieUpload">
-          ➕ Add Movies
-        </label>
+    <button onclick="checkPassword()">
+      🔓 Unlock
+    </button>
 
-        <input
-          type="file"
-          id="movieUpload"
-          accept="video/*,.mp4,.webm,.ogg,.mov,.m4v"
-          multiple
-        >
-      </div>
+    <p id="passwordError"></p>
 
-      <p id="status" aria-live="polite">
-        Welcome to your movie library!
-      </p>
+  </div>
 
-      <section id="movieGrid" class="movie-grid">
-        <p id="emptyMessage">
-          No movies added yet. Click “Add Movies” to select videos.
-        </p>
-      </section>
+</div>
+
+
+<!-- ================= MOVIE APP ================= -->
+
+<div id="movieApp" class="hidden">
+
+  <header>
+
+    <h1>🎬 My Movie App</h1>
+
+    <input
+      type="text"
+      id="search"
+      placeholder="Search movies..."
+      onkeyup="searchMovie()"
+    >
+
+  </header>
+
+
+  <div class="container">
+
+
+    <!-- Movie 1 -->
+
+    <div class="movie">
+
+      <h2>Sample Movie 1</h2>
+
+      <iframe
+        src="https://www.youtube.com/embed/V_pGNyKNrJw"
+        title="Sample Movie 1"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+        allowfullscreen>
+      </iframe>
+
     </div>
 
-    <footer>🎥 My Movies App</footer>
-  </main>
 
-  <script>
-    /* ================= PASSWORD ================= */
+     <!-- Movie 2 -->
 
-    const APP_PASSWORD = "varmateja";
+    <div class="movie">
 
-    const passwordScreen =
-      document.getElementById("passwordScreen");
+      <h2>Sample Movie 2</h3>
 
-    const passwordInput =
-      document.getElementById("passwordInput");
+      <iframe
+        src="https://www.youtube.com/embed/eAfsQoBngKY"
+        title="Sample Movie 2"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+        allowfullscreen>
+      </iframe>
 
-    const passwordError =
-      document.getElementById("passwordError");
-
-    const movieApp =
-      document.getElementById("movieApp");
-
-    const passwordForm =
-      document.getElementById("passwordForm");
-
-    function checkPassword(event) {
-      if (event) event.preventDefault();
-
-      if (passwordInput.value === APP_PASSWORD) {
-        passwordScreen.classList.add("hidden");
-        movieApp.classList.remove("hidden");
-
-        passwordError.textContent = "";
-        passwordInput.value = "";
-
-        document.getElementById("search").focus();
-      } else {
-        passwordError.textContent = "❌ Wrong password. Try again.";
-        passwordInput.value = "";
-        passwordInput.focus();
-      }
-    }
-
-    passwordForm.addEventListener("submit", checkPassword);
-
-    document
-      .getElementById("togglePassword")
-      .addEventListener("click", function () {
-        const showing = passwordInput.type === "text";
-
-        passwordInput.type = showing ? "password" : "text";
-        this.textContent = showing ? "Show" : "Hide";
-      });
-
-    document
-      .getElementById("lockButton")
-      .addEventListener("click", function () {
-        movieApp.classList.add("hidden");
-        passwordScreen.classList.remove("hidden");
-        passwordError.textContent = "";
-        passwordInput.value = "";
-        passwordInput.focus();
-      });
+    </div>
 
 
-    /* ================= MOVIE SEARCH ================= */
+    <!-- Movie 3 -->
 
-    const searchInput = document.getElementById("search");
-    const movieGrid = document.getElementById("movieGrid");
-    const status = document.getElementById("status");
-    const movieUpload = document.getElementById("movieUpload");
+    <div class="movie">
 
-    // Each entry holds a video URL for this browser session.
-    const movies = [];
+      <h2>Sample Movie 3</h2>
 
-    function searchMovie() {
-      const query = searchInput.value.trim().toLowerCase();
-      let visibleCount = 0;
+      <iframe
+        src="https://www.youtube.com/embed/pjfXpRPHeVY"
+        title="Sample Movie 3"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+        allowfullscreen>
+      </iframe>
 
-      movies.forEach(function (movie) {
-        const matches = movie.title.toLowerCase().includes(query);
-
-        movie.card.classList.toggle("hidden", !matches);
-
-        if (matches) visibleCount++;
-      });
-
-      updateEmptyMessage(query, visibleCount);
-    }
-
-    searchInput.addEventListener("input", searchMovie);
+    </div>
 
 
-    /* ================= MOVIE UPLOAD ================= */
+    <!-- Movie 4 -->
 
-    movieUpload.addEventListener("change", function () {
-      const files = Array.from(this.files || []);
-      let added = 0;
+    <div class="movie">
 
-      files.forEach(function (file) {
-        if (!file.type.startsWith("video/")) {
-          return;
-        }
+      <h2>Sample Movie 4</h2>
 
-        const movie = {
-          title: file.name.replace(/\.[^/.]+$/, ""),
-          url: URL.createObjectURL(file),
-          card: null
-        };
+      <iframe
+        src="https://www.youtube.com/embed/CHWwf9nEXbI"
+        title="Sample Movie 4"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+        allowfullscreen>
+      </iframe>
 
-        movie.card = createMovieCard(movie);
-        movies.push(movie);
-
-        movieGrid.appendChild(movie.card);
-        added++;
-      });
-
-      this.value = "";
-
-      if (added > 0) {
-        status.textContent =
-          added + " movie(s) added. Videos are available in this session.";
-      } else if (files.length > 0) {
-        status.textContent = "Please select valid video files.";
-      }
-
-      searchMovie();
-    });
-
-    function createMovieCard(movie) {
-      const card = document.createElement("article");
-      card.className = "movie";
-
-      const video = document.createElement("video");
-      video.src = movie.url;
-      video.controls = true;
-      video.preload = "metadata";
-      video.playsInline = true;
-      video.setAttribute("aria-label", movie.title);
-
-      // Add an explicit fullscreen control for supported browsers.
-      const info = document.createElement("div");
-      info.className = "movie-info";
-
-      const title = document.createElement("h3");
-      title.textContent = movie.title;
-
-      const actions = document.createElement("div");
-      actions.className = "movie-actions";
-
-      const fullscreenButton = document.createElement("button");
-      fullscreenButton.type = "button";
-      fullscreenButton.textContent = "⛶ Fullscreen";
-
-      fullscreenButton.addEventListener("click", async function () {
-        try {
-          if (document.fullscreenElement) {
-            await document.exitFullscreen();
-          } else if (video.requestFullscreen) {
-            await video.requestFullscreen();
-          } else if (video.webkitEnterFullscreen) {
-            video.webkitEnterFullscreen();
-          } else {
-            status.textContent =
-              "Fullscreen is not supported by this browser.";
-          }
-        } catch (error) {
-          status.textContent =
-            "Could not open fullscreen. Try the video's fullscreen control.";
-        }
-      });
-
-      const deleteButton = document.createElement("button");
-      deleteButton.type = "button";
-      deleteButton.textContent = "🗑 Remove";
-      deleteButton.className = "delete-button";
-
-      deleteButton.addEventListener("click", function () {
-        video.pause();
-        card.remove();
-
-        const index = movies.indexOf(movie);
-        if (index !== -1) movies.splice(index, 1);
-
-        URL.revokeObjectURL(movie.url);
-        status.textContent = "Movie removed from the library.";
-
-        searchMovie();
-      });
-
-      actions.append(fullscreenButton, deleteButton);
-      info.append(title, actions);
-      card.append(video, info);
-
-      return card;
-    }
+    </div>
 
 
-    /* ================= EMPTY / SEARCH MESSAGE ================= */
+     <!-- Movie 5 -->
 
-    function updateEmptyMessage(query, visibleCount) {
-      let message = document.getElementById("emptyMessage");
+    <div class="movie">
 
-      if (!message) {
-        message = document.createElement("p");
-        message.id = "emptyMessage";
-        message.id = "emptyMessage";
-        message.style.gridColumn = "1 / -1";
-        message.style.textAlign = "center";
-        message.style.padding = "35px 10px";
-        message.style.color = "#aaa";
-        movieGrid.appendChild(message);
-      }
+      <h2>Dhurandhar The Revenge (2026)</h2>
 
-      if (movies.length === 0) {
-        message.textContent =
-          "No movies added yet. Click “Add Movies” to select videos.";
-        message.classList.remove("hidden");
-      } else if (visibleCount === 0) {
-        message.textContent = query
-          ? "No movies match your search."
-          : "No movies available.";
-        message.classList.remove("hidden");
-      } else {
-        message.classList.add("hidden");
-      }
-    }
-  </script>
+      <iframe
+        src="https://www.youtube.com/embed/cU1zdg61yT4"
+        title="Dhurandhar The Revenge (2026)"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+        allowfullscreen>
+      </iframe>
+
+    </div>
+
+
+  </div>
+
+</div>
+
+
+<script src="script.js"></script>
 
 </body>
 </html>
-```
+
+
+
