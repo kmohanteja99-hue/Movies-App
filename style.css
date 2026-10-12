@@ -1,23 +1,27 @@
 ```css
-/* GENERAL */
+/* ===== NETFLIX-STYLE MOVIE APP ===== */
+
 * {
   box-sizing: border-box;
 }
 
 body {
   margin: 0;
-  font-family: Arial, sans-serif;
-  background: #030711;
-  color: #f5f7ff;
+  font-family: Arial, Helvetica, sans-serif;
+  background: #141414;
+  color: #ffffff;
 }
 
-/* PASSWORD SCREEN */
+/* ===== PASSWORD SCREEN ===== */
+
 .password-screen {
   position: fixed;
   inset: 0;
   width: 100%;
-  min-height: 100vh;
-  background: radial-gradient(circle at top, #082653, #030711 65%);
+  height: 100vh;
+  background:
+    linear-gradient(rgba(0,0,0,.65), rgba(0,0,0,.9)),
+    radial-gradient(circle at top, #5b1015, #000000 70%);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -28,31 +32,32 @@ body {
   width: 380px;
   max-width: 90%;
   padding: 35px;
-  background: #080e1c;
-  border: 1px solid #087bff;
-  border-radius: 18px;
+  background: rgba(0,0,0,.88);
+  border-radius: 5px;
+  border-top: 4px solid #e50914;
   text-align: center;
-  box-shadow: 0 0 35px #0066ff35, 0 0 20px #ff174425;
-  animation: passwordBox 0.5s ease;
+  box-shadow: 0 15px 45px #00000099;
+  animation: passwordBox .4s ease;
 }
 
 @keyframes passwordBox {
-  from { opacity: 0; transform: scale(.85); }
-  to { opacity: 1; transform: scale(1); }
+  from { opacity: 0; transform: translateY(15px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 .lock-icon {
-  font-size: 60px;
+  font-size: 55px;
   margin-bottom: 10px;
 }
 
 .password-box h1 {
-  color: #42a5ff;
+  color: #e50914;
   font-size: 28px;
+  margin: 10px 0;
 }
 
 .password-box p {
-  color: #aab6cc;
+  color: #b3b3b3;
   font-size: 15px;
 }
 
@@ -60,161 +65,184 @@ body {
   width: 100%;
   padding: 14px;
   margin: 15px 0;
-  background: #050914;
+  background: #333333;
   color: white;
-  border: 1px solid #283957;
-  border-radius: 9px;
+  border: 1px solid #555;
+  border-radius: 4px;
   outline: none;
   font-size: 16px;
 }
 
 .password-box input:focus {
-  border-color: #1684ff;
-  box-shadow: 0 0 12px #1684ff45;
+  border-color: white;
 }
 
 .password-box button {
   width: 100%;
   padding: 14px;
-  border: none;
-  border-radius: 9px;
-  background: linear-gradient(100deg, #087bff, #e50935);
+  background: #e50914;
   color: white;
-  font-size: 16px;
+  border: none;
+  border-radius: 4px;
+  font-size: 17px;
   font-weight: bold;
   cursor: pointer;
-  transition: .25s;
+  transition: background .2s;
 }
 
 .password-box button:hover {
-  filter: brightness(1.2);
-  transform: translateY(-2px);
+  background: #b20710;
 }
 
 #passwordError {
-  color: #ff405b;
+  color: #ff5964;
   min-height: 20px;
   margin-top: 15px;
 }
 
-/* HIDDEN */
+/* ===== HIDDEN ===== */
+
 .hidden {
   display: none;
 }
 
-/* HEADER */
+/* ===== HEADER ===== */
+
 header {
-  background: #050914;
-  padding: 24px 20px;
+  position: relative;
+  background: linear-gradient(180deg, #080808, #141414);
+  padding: 22px 20px;
   text-align: center;
-  border-bottom: 1px solid #123b70;
-  box-shadow: 0 5px 25px #0066ff18;
+  border-bottom: 1px solid #292929;
 }
 
 header h1 {
   margin: 0 0 18px;
-  font-size: clamp(25px, 3vw, 36px);
-  color: white;
-  text-shadow: 0 0 18px #087bff55;
+  font-size: clamp(26px, 3vw, 38px);
+  color: #e50914;
+  font-weight: 800;
+  letter-spacing: -.5px;
 }
 
 #search {
-  width: min(600px, 90%);
+  width: min(600px, 95%);
   padding: 14px 18px;
-  background: #0a1222;
+  background: #252525;
   color: white;
-  border: 1px solid #24446e;
-  border-radius: 25px;
+  border: 1px solid #444;
+  border-radius: 4px;
   outline: none;
   font-size: 16px;
-  transition: .25s;
 }
 
 #search:focus {
-  border-color: #1684ff;
-  box-shadow: 0 0 15px #087bff30;
+  border-color: #e50914;
 }
 
 #search::placeholder {
-  color: #8492aa;
+  color: #b3b3b3;
 }
 
-/* MOVIE GRID */
+/* ===== MOVIE GRID ===== */
+
 .container {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 24px;
-  padding: 28px;
-  max-width: 1800px;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 18px;
+  padding: 28px 24px;
+  max-width: 1900px;
   margin: auto;
+  align-items: start;
 }
 
-/* MOVIE CARDS */
+/* ===== MOVIE CARDS ===== */
+
 .movie {
   min-width: 0;
   overflow: hidden;
-  background: linear-gradient(145deg, #0c1527, #070b14);
-  padding: 12px;
-  border: 1px solid #203754;
-  border-radius: 15px;
-  transition: transform .25s, border-color .25s, box-shadow .25s;
+  background: #181818;
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #292929;
+  transition: transform .25s, box-shadow .25s;
 }
 
 .movie:hover {
-  transform: translateY(-5px);
-  border-color: #087bff;
-  box-shadow: 0 10px 28px #0066ff20, 0 0 12px #e5093510;
+  transform: scale(1.04);
+  box-shadow: 0 10px 25px #000000aa;
+  border-color: #555;
+  position: relative;
+  z-index: 2;
 }
 
 .movie h2 {
-  margin: 6px 0 15px;
-  font-size: 18px;
+  margin: 5px 0 12px;
+  font-size: 17px;
   line-height: 1.4;
-  color: #f5f7ff;
+  color: #ffffff;
+  min-height: 24px;
 }
 
-/* VIDEO */
+/* ===== VIDEO PLAYER ===== */
+
 iframe,
 video {
   width: 100%;
-  height: 230px;
-  border-radius: 10px;
+  height: 210px;
+  border-radius: 3px;
   display: block;
-  border: 1px solid #172a44;
+  border: none;
 }
 
 video {
-  background: #000;
+  background: black;
 }
 
-/* MOBILE */
-@media (max-width: 600px) {
+/* ===== RESPONSIVE LAYOUT ===== */
+
+@media (max-width: 1200px) {
+  .container {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 750px) {
+  .container {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+    padding: 15px 10px;
+  }
+
+  .movie h2 {
+    font-size: 15px;
+  }
+
+  iframe,
+  video {
+    height: 180px;
+  }
+}
+
+@media (max-width: 450px) {
+  header {
+    padding: 20px 12px;
+  }
+
+  .container {
+    grid-template-columns: 1fr;
+  }
+
+  iframe,
+  video {
+    height: 220px;
+  }
+
   .password-box {
-    width: 320px;
     padding: 25px;
   }
 
   .password-box h1 {
     font-size: 24px;
-  }
-
-  header {
-    padding: 20px 12px;
-  }
-
-  #search {
-    width: 100%;
-  }
-
-  .container {
-    grid-template-columns: 1fr;
-    gap: 18px;
-    padding: 14px;
-  }
-
-  iframe,
-  video {
-    height: 230px;
   }
 }
 ```
